@@ -165,13 +165,14 @@
 .sidebar-text {
     display: inline-block;
     font-size: 11px;
-    /* font-weight: 600; */
+    font-weight: 600;
     padding-right: 30px;
 }
 
 .sidebar-text-longer {
     display: inline-block;
-    max-width: 144px;
+    max-width: 154px;
+    font-weight: 600;
 }
 
 .main-body h1 {
