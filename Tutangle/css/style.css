@@ -167,6 +167,7 @@
     font-size: 11px;
     font-weight: 600;
     padding-right: 30px;
+    color: #2a2a2a;
 }
 
 .sidebar-text-longer {
@@ -209,8 +210,9 @@
 
 .main-tab-text {
     position: relative;
-    top: 12px;
+    top: 9px;
     font-size: 13px;
+    font-weight: 600;
 }
 
 .small-tab {
@@ -224,7 +226,6 @@
 .main-left-tab .lower-tabs-left {
     background: url('../images/selected-tab.png') no-repeat;
     left: 13px;
-    color: #fff;
 }
 
 .main-left-tab .lower-tabs-left button {
@@ -246,11 +247,17 @@
 .main-upper-tabs .lower-tabs-right button {
     display: inline-block;
     margin-top: 8px;
+    width: 111px;
+    height: 19px;
 }
 
 .small-tab:hover {
     background: url('../images/selected-tab.png') no-repeat;
     cursor: pointer;
+}
+
+.main-upper-tabs button:hover {
+    color: #fff;
 }
 
 .entries-container {
