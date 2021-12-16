@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a:hover,
+a:visited,
+a:link,
+a:active {
+    text-decoration: none;
+    color: #000;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+img {
+    max-width: 100%;
+}
