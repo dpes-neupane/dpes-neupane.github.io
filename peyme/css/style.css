@@ -4,7 +4,6 @@
 
 .small-text {
     margin-top: 10px;
-    width: 350px;
     font-family: SVN-Gilroy;
     font-style: normal;
     font-weight: normal;
@@ -121,6 +120,10 @@ h1 {
 }
 
 .nav {
+    display: none;
+}
+
+.header-figures {
     display: none;
 }
 
@@ -295,6 +298,10 @@ h1 {
     border: none;
 }
 
+.support-text {
+    font-size: 14px;
+}
+
 #sign-up-now {
     margin: 10px auto;
     width: 183px;
@@ -330,7 +337,7 @@ h1 {
 #sign-up-button {
     width: 184px;
     height: 36px;
-    padding: 8px, 24px, 8px, 24px;
+    padding: 8px 24px 8px 24px;
     border-radius: 4px;
     border: none;
     color: #154263;
