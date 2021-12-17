@@ -215,12 +215,10 @@ h1 {
     margin-right: 1%;
 }
 
-
 .features {
     width: auto;
     margin: 0 auto;
 }
-
 
 .features-title {
     margin-bottom: 36px;
@@ -233,17 +231,11 @@ h1 {
 .feature-grid {
     width: 60%;
     margin: 0 auto;
-
-.center {
-    width: auto;
-    text-align: center;
-
 }
 
 .box-rounded {
     border-radius: 16px;
     background-color: #fafcfe;
-
     margin: 10px auto;
 }
 
@@ -309,5 +301,4 @@ h1 {
     font-size: 18px;
     line-height: 20px;
     text-align: center;
-
 }
