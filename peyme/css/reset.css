@@ -28,3 +28,9 @@ a:active {
 img {
     max-width: 100%;
 }
+
+.clearfix {
+    content: '';
+    clear: both;
+    display: table;
+}

@@ -1,6 +1,24 @@
 @media screen and (min-width: 480px) {
+    .header-wrapper {
+        width: 98%;
+        margin: 0 auto;
+        clear: both;
+        display: table;
+    }
+    .left-contents {
+        float: left;
+        margin: 10px auto;
+    }
     .hamburger {
-        display: none;
+        float: left;
+        margin-left: 0px;
+    }
+    #main-logo {
+        float: right;
+        margin-left: 30px;
+    }
+    .right-contents {
+        float: right;
     }
     h1 {
         line-height: 72px;
@@ -26,10 +44,6 @@
     .button-1 {
         margin: 0 auto;
     }
-
 }
 
-@media screen and (min-width: 780px) {
-
-}
-
+@media screen and (min-width: 780px) {}
