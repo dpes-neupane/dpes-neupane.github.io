@@ -16,3 +16,8 @@
     background-repeat: no-repeat;
     background-position: center, top center, left center, right bottom;
 }
+
+.center {
+    width: auto;
+    text-align: center;
+}
