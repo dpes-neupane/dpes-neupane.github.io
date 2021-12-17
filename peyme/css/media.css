@@ -1,0 +1,29 @@
+@media screen and (min-width: 480px) {
+    .hamburger {
+        display: none;
+    }
+    h1 {
+        line-height: 72px;
+    }
+    .header-lower {
+        width: 98%;
+        margin: 0 auto;
+    }
+    .text-box {
+        background-image: none;
+        background-image: url(../images/wave.svg) no-repeat;
+        width: 100%;
+        height: 535px;
+    }
+    .small-text {
+        font-family: SVN-Gilroy;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        color: #0a225f;
+    }
+    .button-1 {
+        margin: 0 auto;
+    }
+}
