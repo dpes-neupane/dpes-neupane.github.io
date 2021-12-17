@@ -178,7 +178,7 @@ h1 {
 }
 
 .body-wrapper {
-    width: 95%;
+    width: 94%;
     margin: 0 auto;
 }
 
@@ -290,6 +290,7 @@ h1 {
 }
 
 #sign-up-now {
+    margin: 10px auto;
     width: 183px;
     height: 56px;
     border-radius: 4px;
@@ -301,4 +302,39 @@ h1 {
     font-size: 18px;
     line-height: 20px;
     text-align: center;
+}
+
+#no-bottom-border {
+    border-bottom: 0px;
+}
+
+.footer_container {
+    color: #fff;
+}
+
+.footer-text .left-lists a {
+    color: #fff;
+}
+
+.inline {
+    display: inline-block;
+    margin: 10px 10px;
+}
+
+#sign-up-button {
+    width: 184px;
+    height: 36px;
+    padding: 8px, 24px, 8px, 24px;
+    border-radius: 4px;
+    border: none;
+    color: #154263;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    font-family: SVN-Gilroy;
+    font-size: 14px;
+}
+
+.footer-text div {
+    padding: 10px 1px;
 }
