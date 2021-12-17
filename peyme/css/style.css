@@ -215,6 +215,13 @@ h1 {
     margin-right: 1%;
 }
 
+
+.features {
+    width: auto;
+    margin: 0 auto;
+}
+
+
 .features-title {
     margin-bottom: 36px;
 }
@@ -223,12 +230,84 @@ h1 {
     margin-bottom: 48px;
 }
 
+.feature-grid {
+    width: 60%;
+    margin: 0 auto;
+
 .center {
     width: auto;
     text-align: center;
+
 }
 
 .box-rounded {
     border-radius: 16px;
     background-color: #fafcfe;
+
+    margin: 10px auto;
+}
+
+.box-rounded:hover {
+    background-color: rgba(233, 227, 227, 0.445);
+}
+
+.box-rounded img {
+    padding-left: 5%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.more {
+    padding: 10px 5px;
+}
+
+.buttons-bottom {
+    margin: 10px auto;
+}
+
+.buttons-bottom button {
+    margin: 10px auto;
+    border: 2px solid #94c1e2;
+    border-radius: 8px;
+    width: 183px;
+    height: 56px;
+    padding: 8px, 24px, 8px, 24px;
+    font-family: SF Pro Display;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+}
+
+#apple {
+    color: #2a84c6;
+    background-color: #fff;
+}
+
+#google {
+    background-color: #1342bb;
+    ;
+    color: #fff;
+    border: none;
+}
+
+#apple:hover {
+    background-color: #1342bb;
+    color: #fff;
+    border: none;
+}
+
+#sign-up-now {
+    width: 183px;
+    height: 56px;
+    border-radius: 4px;
+    padding: 8px, 24px, 8px, 24px;
+    color: #fff;
+    border: none;
+    background-color: #1342bb;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
+    text-align: center;
+
 }

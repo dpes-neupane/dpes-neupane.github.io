@@ -15,4 +15,9 @@
     background-image: url(../images/Point-line\ triangle\ cube.svg), url(../images/Point-line\ triangle\ cube\ smaller.svg), url(../images/Point-line\ triangle\ cube\ smaller.svg), url(../images/Point-line\ triangle\ cube\ smaller.svg);
     background-repeat: no-repeat;
     background-position: center, top center, left center, right bottom;
+
 }
+
+.center {
+    width: auto;
+    text-align: center;
