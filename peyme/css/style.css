@@ -1,10 +1,30 @@
 .header_container {
     margin-top: 20px;
+    position: relative;
+}
+
+.header-wrapper {
+    max-width: 1226px;
+    margin: 20px auto 0 auto;
+}
+
+.header-lower {
+    max-width: 1226px;
+    margin: 20px auto 0 auto;
+}
+
+.outer-container {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+#wave {
+    display: none;
 }
 
 .small-text {
     margin-top: 10px;
-    font-family: SVN-Gilroy;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -17,7 +37,7 @@
 }
 
 .bolder-text {
-    font-family: SVN-Gilroy;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -30,10 +50,11 @@
     line-height: 26px;
     font-weight: 600;
     color: #0a225f;
+    font-family: 'Source  Sans Pro', sans-serif;
 }
 
 h2 {
-    font-family: SF Pro Display;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 48px;
@@ -42,17 +63,17 @@ h2 {
 }
 
 h4 {
-    font-family: SF Pro Display;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 34px;
     line-height: 44px;
     color: #0a225f;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0.25);
+    text-shadow: 0px 4px 4px;
 }
 
 h1 {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 60px;
@@ -79,7 +100,7 @@ h1 {
 }
 
 #sign-in {
-    font-family: SVN-Gilroy;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
@@ -108,7 +129,7 @@ h1 {
 }
 
 #sign-up {
-    font-family: SVN-Gilroy;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
@@ -273,11 +294,19 @@ h1 {
     width: 183px;
     height: 56px;
     padding: 8px, 24px, 8px, 24px;
-    font-family: SF Pro Display;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-weight: 600;
     font-size: 20px;
     line-height: 28px;
     text-align: center;
+}
+
+.phone-image {
+    display: none;
+}
+
+.right-side-img {
+    display: none;
 }
 
 #apple {
@@ -344,10 +373,25 @@ h1 {
     font-weight: 700;
     line-height: 20px;
     text-align: center;
-    font-family: SVN-Gilroy;
+    font-family: 'Source  Sans Pro', sans-serif;
     font-size: 14px;
 }
 
 .footer-text div {
     padding: 10px 1px;
+}
+
+.footer-text ul li {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.footer-text ul li:first-child {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 700;
+}
+
+.right-side-figure {
+    display: none;
 }
