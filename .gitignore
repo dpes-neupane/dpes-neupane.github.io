@@ -1,5 +1,5 @@
 .vscode/
 
-workspace.code-workspace
+*.code-workspace
 *.vscode.code-workspace
 *.vscode
