@@ -10,7 +10,7 @@ const points = [
 ];
 
 
-button.addEventListener('click', function(event) {
+window.addEventListener("load", function(event) {
     var box = document.createElement("div");
     box.className = "scatterBox";
 
