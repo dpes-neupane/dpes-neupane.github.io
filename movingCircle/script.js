@@ -1,11 +1,11 @@
 const main = document.getElementById("main");
 console.log(main);
-var left = 45;
+
 var box = document.createElement("div");
 box.id = "box";
 box.style.height = "100px";
 box.style.width = "100px";
-box.style.background = "red";
+box.style.background = "#47a";
 box.style.position = "relative";
 box.style.border = "1px solid black";
 main.appendChild(box);
@@ -21,7 +21,7 @@ ball.style.top = "45px";
 ball.style.borderRadius = "50%";
 box.appendChild(ball);
 var ball = document.getElementById("ball");
-
+var left = parseInt(ball.style.left);
 
 
 flag = 0;
