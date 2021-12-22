@@ -21,7 +21,7 @@ window.addEventListener("load", function(event) {
 
 
     document.getElementById("main_container").appendChild(box);
-
+    divObject = [];
     for (var i = 0; i < points.length; i++) {
 
         var x = points[i].x * 5;
@@ -35,9 +35,22 @@ window.addEventListener("load", function(event) {
         div.style.width = "10px";
         div.style.height = "10px";
         div.style.borderRadius = "50%";
+        divObject.push(div);
+
         box.append(div);
+
         console.log(x, y);
     }
+    divObject.forEach(element => {
+        element.addEventListener("click", () => {
+            console.log(element.style.left);
+            if (element.style.background == "red") element.style.background = "blue";
+            else
+                element.style.background = "red";
+
+        })
+    })
+
 
 
 });
