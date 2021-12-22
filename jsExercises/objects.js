@@ -12,7 +12,7 @@ const me = {
             enrolledDate: 2014
         },
         {
-            name: 'Patan Multiple Campus',
+            name: 'Multinational Campus',
             enrolledDate: 2018
         }
     ]

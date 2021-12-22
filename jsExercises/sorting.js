@@ -17,7 +17,7 @@ function sortBy(arr, key) {
     for (let i = 0; i < sortedarr.length; i++) {
         for (let j = i; j < sortedarr.length; j++) {
             if (sortedarr[i][key] > sortedarr[j][key]) {
-                console.log(sortedarr[i][key])
+
                 temp = sortedarr[i];
                 sortedarr[i] = sortedarr[j];
                 sortedarr[j] = temp;
