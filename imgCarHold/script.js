@@ -10,8 +10,8 @@
 
 sliderValues = {
     containerName: "carousel-container-1",
-    containerWidth: "500px",
-    containerHeight: "300px",
+    containerWidth: "700px",
+    containerHeight: "500px",
     overflow: "hidden",
     slideName: "carousel-slide-1",
     noOfImg: 5,
@@ -49,7 +49,7 @@ function InitializeSliderContainer(sliderValues) {
 
     carouselCont.style.height = sliderValues.containerHeight;
     carouselCont.style.border = "2px solid black";
-    carouselCont.style.margin = "auto";
+    carouselCont.style.margin = " 10px auto";
     carouselCont.style.position = "relative";
     carouselCont.style.overflow = sliderValues.overflow;
 
