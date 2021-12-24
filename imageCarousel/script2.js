@@ -1,19 +1,22 @@
 /* 
-    the function accepts only string values
+    The first function is all that is needed to create the slider. All the functions are called through it. 
+    The first function accepts the parameters as an object and css properties are expected to be string values.
+    The transition time is the amount of pixels increased in each update. It is not perfect. 
+    It will try to be exactly divisible to the width of the image OR containerWidth. So, try to put on values that exactly divides the width 
+    of the image. So, NO PRIME NUMBERED WIDTH VALUES.
 
 
 */
-// "carousel-container", "700px", "500px", "false"
 
 sliderValues = {
     containerName: "carousel-container",
-    containerWidth: "700px",
-    containerHeight: "500px",
-    overflow: "false",
+    containerWidth: "500px",
+    containerHeight: "300px",
+    overflow: "hidden",
     slideName: "carousel-slide",
     noOfImg: 5,
-    transitionTime: 1149,
-    holdTime: 5000,
+    transitionTime: 40,
+
 
 
 }
@@ -27,7 +30,7 @@ function InitializeSliderContainer(sliderValues) {
 
 
     carouselCont = document.getElementById(sliderValues.containerName);
-    console.log()
+
     carouselCont.style.width = sliderValues.containerWidth;
 
     carouselCont.style.height = sliderValues.containerHeight;
@@ -39,7 +42,7 @@ function InitializeSliderContainer(sliderValues) {
     InitializeSlide(sliderValues, carouselCont);
 
 
-    console.log(carouselCont)
+
 
 }
 /* The name of the images wrapper, the no of images there are in the slide
@@ -50,8 +53,8 @@ All the images in that slider will have the same class
 function InitializeSlide(slider, carouselCont) {
 
 
+    let slide;
 
-    let counter = 0;
     let imgArr = [];
     let radioArr = [];
     let imgArrWidth = []; //holds the top left corner value of each image in the slide
@@ -60,34 +63,52 @@ function InitializeSlide(slider, carouselCont) {
     let holdtime;
     let imgNo = 1;
     noOfImg = slider.noOfImg;
+
     slide = document.getElementById(slider.slideName);
     containerWidt = parseInt(carouselCont.style.width)
     slide.style.width = ((slider.noOfImg + 2) * containerWidt) + "px";
-    slide.style.margin = "auto auto auto -700px";
+    slide.style.margin = "auto auto auto -" + containerWidt + "px";
     slide.style.position = "absolute";
     slide.style.left = "0px";
     slide.style.right = "0px";
     transitionTime = slider.transitionTime;
+    if (containerWidt % transitionTime !== 0) {
+        while (transitionTime !== containerWidt) {
+            if (containerWidt % transitionTime === 0) break;
+            transitionTime++;
+        };
+    }
 
     //buttons for sliding next and right
     btn1 = document.createElement("button");
     btn2 = document.createElement("button");
+    btnImg1 = document.createElement("img");
+    btnImg1.id = "left-arrow";
+    btnImg2 = document.createElement("img");
+    btnImg2.id = "right-arrow";
+    btnImg1.src = "./images/arrow-left-solid.svg";
+    btnImg2.src = "./images/arrow-right-solid.svg";
+
+
     btn1.id = "btn1";
     btn2.id = "btn2";
     btn1.style.position = "relative";
     btn1.style.opacity = "40%";
     btn1.style.width = "50px";
     btn1.style.height = "50px";
-    btn1.style.top = "250px";
+    btn1.style.top = "40%";
 
     btn2.style.position = "relative";
     btn2.style.opacity = "40%";
     btn2.style.width = "50px";
     btn2.style.height = "50px";
-    btn2.style.top = "250px";
-    btn2.style.left = "600px";
+    btn2.style.top = "40%";
+    btn2.style.left = (containerWidt - 100) + "px";
+    btn1.appendChild(btnImg1);
+    btn2.appendChild(btnImg2);
     carouselCont.appendChild(btn1);
     carouselCont.appendChild(btn2);
+
 
 
 
@@ -101,7 +122,7 @@ function InitializeSlide(slider, carouselCont) {
         element.remove();
     })
 
-    // console.log(imgSrc);
+
 
     for (let i = 0; i < (noOfImg + 2); i++) {
         let img = document.createElement("img");
@@ -122,22 +143,26 @@ function InitializeSlide(slider, carouselCont) {
 
 
 
+    let div = document.createElement("div");
+    div.id = "radio-wrappers";
+    carouselCont.appendChild(div);
+    div.style.position = "absolute";
+    div.style.top = "90%";
+    div.style.left = "38%";
 
     for (let i = 0; i < noOfImg; i++) {
         let radio = document.createElement("INPUT");
-        radio.style.position = "relative";
+        // radio.style.position = "relative";
         radio.style.width = "10px";
         radio.style.height = "10px";
         radio.style.marginRight = "10px";
         radio.style.checked = false;
-        radio.style.left = "205px";
-        radio.style.top = "410px";
 
 
         radio.setAttribute("type", "radio");
         radio.setAttribute("name", "radio");
 
-        carouselCont.appendChild(radio);
+        div.appendChild(radio);
 
 
 
@@ -159,25 +184,20 @@ function InitializeSlide(slider, carouselCont) {
 
 
 
-    let dataForAnimation = {
-        containerWidt: containerWidt,
-        imgArrWidth: imgArrWidth,
-        slide: slide,
-        radioArr: radioArr
-    }
+
     btn1.addEventListener("click", () => { //[previous button
 
 
-        counter = 0;
+
         prev();
 
-        console.log(imgNo);
+
 
 
     });
     btn2.addEventListener("click", () => { //next button
 
-        // counter = 0;
+
 
         next();
         // console.log(-(imgArrWidth[imgArrWidth.length - 1] - containerWidt));
@@ -197,7 +217,7 @@ function InitializeSlide(slider, carouselCont) {
             slide.style.left = imgArrWidth[imgArrWidth.length - 1] + "px";
         }
 
-        slide.style.left = (parseInt(slide.style.left) + 100) + "px";
+        slide.style.left = (parseInt(slide.style.left) + transitionTime) + "px";
         if (parseInt(slide.style.left) % containerWidt !== 0) {
 
 
@@ -244,8 +264,8 @@ function InitializeSlide(slider, carouselCont) {
 
         }
         // counter += 30;
-        slide.style.left = (parseInt(slide.style.left) - 100 + "px");
-        console.log(slide.style.left);
+        slide.style.left = (parseInt(slide.style.left) - transitionTime + "px");
+
         if (parseInt(slide.style.left) % -(containerWidt) !== 0) {
             requestAnimationFrame(next);
 
