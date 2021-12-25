@@ -1,5 +1,5 @@
-#canvas1 {
-    width: 900px;
+canvas {
+    /* width: 900px; */
     margin: 20px auto;
     box-sizing: border-box;
     border: 1px solid black;
