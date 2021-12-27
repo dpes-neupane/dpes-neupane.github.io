@@ -1,8 +1,8 @@
 canvas = document.querySelector("canvas");
 console.log(canvas)
 ctx = canvas.getContext("2d");
-canvas.height = 500;
-canvas.width = 700;
+canvas.height = 700;
+canvas.width = 900;
 let BallArray = []
 
 
@@ -506,7 +506,7 @@ function CreateBallsArr(noOfBalls) {
     maxAttempts = 3000;
     arr = []
     while (placed < noOfBalls && maxAttempts > 0) {
-        let radii = getRandomNoBetn(5, 16);
+        let radii = getRandomNoBetn(2, 5);
         let x = getRandomNoBetn(radii, canvas.width - radii);
         let y = getRandomNoBetn(radii, canvas.height - radii);
         available = true;
@@ -530,9 +530,12 @@ function CreateBallsArr(noOfBalls) {
 
 
     }
-    if (maxAttempts === 0) {
-        console.log("only placed " + placed + "objects");
-    }
+
+
+    //if you were wondering how many were created 
+    // if (maxAttempts === 0) {
+    //     console.log("only placed " + placed + "objects");
+    // }
     return arr;
 
 }
@@ -551,10 +554,10 @@ function CreateBallsArr(noOfBalls) {
 
 
 
-
+//initializing new objects
 
 function init() {
-    BallArray = CreateBallsArr(100);
+    BallArray = CreateBallsArr(2000);
 
 
 
@@ -570,7 +573,7 @@ function init() {
 
 
 
-
+//handling animation
 function animate() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -578,40 +581,39 @@ function animate() {
     let qt = new QuadTree(boundary, 5);
     for (let i = 0; i < BallArray.length; i++) {
         qt.insert(BallArray[i]);
-        // BallArray[i].draw();
+
     }
-    // qt.show();
 
-
-
-
-    // console.log(points);
-    // points.forEach(element => {
-    //     ctx.beginPath();
-    //     element.draw("green");
-
-    //     ctx.fill()
-    // })
 
     for (let i = 0; i < BallArray.length; i++) {
         let range = new QueryCircle(BallArray[i].x, BallArray[i].y, BallArray[i].radius * 2);
         closeCircles = qt.query(range);
         collidedCircles = detectCollision(BallArray[i], closeCircles);
-        // console.log(collidedCircles);
+
         for (let j = 0; j < collidedCircles.length; j++) {
             resolveCollision(collidedCircles[j], BallArray[i]);
-            // console.log(collidedCircles[j], BallArray[i]);
+
         }
         BallArray[i].update();
-        // if (detectCollision(BallArray[i], BallArray)) console.log(BallArray[i]);
+
     }
-    // console.log(canvas.getBoundingClientRect());
+
 
     requestAnimationFrame(animate);
 
 
 }
 
+
+
+
+
+
+
+
+
+
+//running the animation
 init();
 
 animate();
