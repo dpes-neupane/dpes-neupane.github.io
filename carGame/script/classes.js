@@ -3,7 +3,7 @@
  * 
  * @param {number} min -minimum value (inlusive)
  * @param {number} max -maximum value (exclusive)
- * @returns {number}
+ * @returns number
  */
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -45,7 +45,7 @@ class HitBox {
      * Checks if two hitboxes collide
      * 
      * @param {object} hitbox -a hitbox type object
-     * @returns {boolean}
+     * @returns boolean
      */
     intersects(hitbox) {
         return (this.x < hitbox.x + hitbox.w &&
@@ -139,7 +139,7 @@ class Loot {
      * @param {number} y -y-coordinate for placing the loot box
      */
     constructor(x, y) {
-        this.x = x;
+        this.x = x - 10;
         this.y = y;
         this.w = 100;
         this.h = 100;
@@ -153,8 +153,8 @@ class Loot {
     drawHitBox() {
         this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
     }
-    moveLoot() {
-        this.y += 1;
+    moveLoot(speed) {
+        this.y += speed;
         this.drawHitBox();
         this.placeLoot();
 
@@ -193,8 +193,8 @@ class Adverseries {
 
 
     }
-    moveAdverseries() {
-        this.y += 1;
+    moveAdverseries(speed) {
+        this.y += speed;
         this.drawHitBox();
         this.placeAdverseries();
 
@@ -241,9 +241,9 @@ class CarGame {
 
     loopBackGround() {
         ctx.drawImage(this.backgroundImge, this.x, this.y, );
-        this.y += 2;
+        this.y += 5;
         ctx.drawImage(this.backgroundImge, this.x, this.y2 - 1000, );
-        this.y2 += 2;
+        this.y2 += 5;
 
         if (this.y2 >= canvas.height + 400) {
             this.y = 0;
@@ -292,30 +292,31 @@ class CarGame {
 
 
     /**for moving the things other than the player */
-    moveAdverseriesandLoot() {
-            this.adverseriesArr.forEach(element => {
-                element.moveAdverseries();
+    moveAdverseriesandLoot(speed) {
+        this.adverseriesArr.forEach(element => {
+            element.moveAdverseries(speed);
 
-            });
+        });
 
-            this.adverseriesArr = this.adverseriesArr.filter(element => {
-                return element.y < canvas.height;
-            });
-            this.lootArr.forEach(element => {
-                element.moveLoot();
+        this.adverseriesArr = this.adverseriesArr.filter(element => {
+            return element.y < canvas.height;
+        });
+        this.lootArr.forEach(element => {
+            element.moveLoot(speed);
 
-            });
-            this.lootArr = this.lootArr.filter(element => {
-                return element.y < canvas.height;
-            });
-            this.makeAdverseriesAndLoot();
+        });
+        this.lootArr = this.lootArr.filter(element => {
+            return element.y < canvas.height;
+        });
+        this.makeAdverseriesAndLoot();
 
 
-        }
-        /**
-         * checks collision between the hitboxes of the player and the obstacles
-         * @returns {boolean}
-         */
+    }
+
+    /**
+     * checks collision between the hitboxes of the player and the obstacles
+     * @returns boolean
+     */
     detectCollision() {
         let collision = false;
         this.adverseriesArr.forEach(element => {
@@ -331,7 +332,7 @@ class CarGame {
 
     /**
      * Returns the index of the loot that is in the array of loots- if the player touched the loot
-     * @returns {number}
+     * @returns number
      */
     detectLoot() {
         let collision = -1;
@@ -365,10 +366,11 @@ class Game {
         this.game.makeAdverseriesAndLoot();
         this.collided = false;
         this.bulletArr = [];
-        this.ammoLeft = 10;
+        this.ammoLeft = 7;
         this.shoot = false;
         this.gotLoot = -1;
         this.score = 0;
+        this.speed = 1;
         this.container = container;
         ctx.font = "30px Comic Sans MS";
         ctx.textAlign = "center";
@@ -417,7 +419,7 @@ class Game {
         ctx.fillText("respective directions and, use spacebar to shoot bullets", 250, 290);
         this.addEvents();
 
-        this.createButton(this.startGame, "100px", "20px", "55%", "45%", false);
+        this.createButton(this.startGame, "100px", "20px", "55%", "46%", false);
 
     }
 
@@ -425,7 +427,7 @@ class Game {
     writeScore(score, ammo) {
             score *= 10;
             ctx.font = "30px Comic Sans MS";
-            ctx.fillText(Math.floor(score), 50, 30);
+            ctx.fillText("SCORE: " + score, 250, 30);
             ctx.fillText(ammo, 450, 30);
 
         }
@@ -446,7 +448,7 @@ class Game {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         this.game.loopBackGround();
-        this.game.moveAdverseriesandLoot();
+        this.game.moveAdverseriesandLoot(this.speed);
         this.collided = this.game.detectCollision();
         this.gotLoot = this.game.detectLoot();
 
@@ -489,19 +491,26 @@ class Game {
 
         if (this.gotLoot > -1) { //touched loot box
             this.game.lootArr.splice(this.gotLoot, 1);
-            this.ammoLeft = 10;
+            this.ammoLeft = 7;
             this.gotLoot = -1;
 
 
         }
 
         if (this.collided) { //obstacle hit
-            this.gameOver(this.animationId);
+            this.gameOver();
             return;
         }
-        this.score += 0.01;
+        this.score += 1;
         this.writeScore(this.score, this.ammoLeft);
+        if (this.score % 10000 === 0) {
+            this.speed += 1;
 
+        }
+        if (this.speed >= 10) {
+            this.gameOver();
+            return;
+        }
         this.animationId = requestAnimationFrame(this.gameLoop.bind(this));
 
     }
@@ -510,7 +519,7 @@ class Game {
 
 
 
-    gameOver(id) {
+    gameOver() {
         this.writeScore(this.score, this.ammoLeft);
         ctx.fillText("Game Over", 250, 300);
         ctx.fillText("Play Again", 250, 350);
