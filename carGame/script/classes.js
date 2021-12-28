@@ -412,6 +412,9 @@ class Game {
     }
 
 
+
+
+
     gameOver(id) {
         this.writeScore(this.score, this.ammoLeft);
         cancelAnimationFrame(id);
