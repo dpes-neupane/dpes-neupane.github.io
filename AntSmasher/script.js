@@ -41,7 +41,7 @@ let checkCollision = false;
 //for drawing sprites outside the object
 /**
  * 
- * @param { object} img - the image object 
+ * @param {object} img - the image object 
  * @param {number} sX - the x-coordinate of the image you want to draw 
  * @param {number} sY - the y-coordinate of the image you want to draw 
  * @param {number} sW - the width of the image you want to draw 
