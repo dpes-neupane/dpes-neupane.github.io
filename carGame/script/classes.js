@@ -52,20 +52,16 @@ class Player {
 
 
     placePlayer() {
-
         ctx.drawImage(this.image, this.x, this.y);
-
 
     }
 
     drawHitBox() {
-
         this.hitbox.draw();
     }
 
     changePositionRight() {
         this.x += 5;
-
     }
 
     changePositionLeft() {
@@ -92,7 +88,7 @@ class Bullet {
         this.y -= 10;
         this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
         this.hitbox.draw();
-        // console.log(this.y);
+
     }
 
 
@@ -168,7 +164,7 @@ class CarGame {
         this.players = [];
         for (let i = 0; i < this.noOfPlayer; i++) {
             let p = new Player();
-            p.drawHitBox();
+
             p.placePlayer();
             this.players.push(p);
 
@@ -185,7 +181,7 @@ class CarGame {
     }
     drawBackGround() {
         ctx.drawImage(this.backgroundImge, this.x, this.y, 500, 1000);
-        // console.log(this.backgroundImge)
+
     }
 
 
@@ -227,7 +223,7 @@ class CarGame {
                 if (rInt) {
                     if (addLoot) {
                         this.lootArr.push(new Loot(element, -201));
-                        console.log("loot");
+
 
                     }
                     this.adverseriesArr.push(new Adverseries(element, -101, 50, 101));
@@ -288,16 +284,13 @@ class CarGame {
     }
 
 
-
-
-
 }
 
 
 
 
 class Game {
-    constructor() {
+    constructor(container) {
         this.game = new CarGame(1, "./images/road.png");
         this.animationId = 0;
         this.right = false;
@@ -308,6 +301,11 @@ class Game {
         this.shoot = false;
         this.gotLoot = -1;
         this.score = 0;
+        this.container = container;
+        ctx.font = "30px Comic Sans MS";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "red";
+
     }
 
     addEvents() {
@@ -319,7 +317,7 @@ class Game {
                         this.game.players[0].currentPosition = 0;
                     }
                     this.right = false;
-                    console.log("left");
+
                     break;
                 case 39:
                     this.game.players[0].currentPosition++;
@@ -327,10 +325,10 @@ class Game {
                         this.game.players[0].currentPosition = 2;
                     }
                     this.right = true;
-                    console.log("right");
+
                     break;
                 case 32:
-                    console.log("space");
+
                     if (this.ammoLeft > 0) {
                         let b = new Bullet(this.game.players[0].x, this.game.players[0].y);
                         this.bulletArr.push(b);
@@ -340,13 +338,31 @@ class Game {
             }
         });
     }
+
+
+    start() {
+        ctx.fillText("Don't Smash the car!", 250, 90);
+        ctx.font = "15px Comic Sans MS";
+        ctx.fillText("To play this game, use the left/right arrow keys to move to the", 250, 270);
+        ctx.fillText("respective directions and, use spacebar to shoot bullets", 250, 290);
+        this.addEvents();
+
+        this.createButton(this.startGame, "100px", "20px", "55%", "45%", false);
+
+    }
+
+
     writeScore(score, ammo) {
         score *= 10;
         ctx.font = "30px Comic Sans MS";
-        ctx.strokeStyle = "red";
         ctx.fillText(Math.floor(score), 50, 30);
         ctx.fillText(ammo, 450, 30);
 
+    }
+
+    startGame() {
+        this.deleteButton();
+        this.gameLoop();
     }
 
     gameLoop() {
@@ -376,6 +392,9 @@ class Game {
         this.bulletArr = this.bulletArr.filter(element => {
             return !(element.y < 0);
         });
+
+
+
         for (let i = 0; i < this.bulletArr.length; i++) {
             for (let j = 0; j < this.game.adverseriesArr.length; j++) {
 
@@ -388,7 +407,7 @@ class Game {
                 }
             }
         }
-        // 
+
 
 
 
@@ -414,8 +433,56 @@ class Game {
 
     gameOver(id) {
         this.writeScore(this.score, this.ammoLeft);
-        cancelAnimationFrame(id);
+        ctx.fillText("Game Over", 250, 300);
+        ctx.fillText("Play Again", 250, 350);
+        this.createButton(this.restartButton, "50px", "50px", "61%", "48%", true);
 
+
+
+    }
+    restartButton() {
+        this.collided = false;
+        this.game = new CarGame(1, "./images/road.png");
+        this.animationId = 0;
+        this.right = false;
+        this.game.makeAdverseriesAndLoot();
+        this.bulletArr = [];
+        this.ammoLeft = 10;
+        this.shoot = false;
+        this.gotLoot = -1;
+        this.score = 0;
+        this.gameLoop();
+        this.deleteButton();
+    }
+
+    deleteButton() {
+        let btn = document.querySelector("button");
+
+        btn.remove();
+    }
+
+    createButton(action, width, height, top, left, img) {
+        let btn = document.createElement("button");
+        if (img) {
+            let btnImg = document.createElement("img");
+            btn.append(btnImg);
+            btnImg.src = "./images/Flat_restart_icon.svg";
+        } else {
+            btn.innerText = "Start";
+            btn.style.fontSize = "25px";
+
+        }
+
+        btn.addEventListener("click", action.bind(this));
+        btn.style.position = "absolute";
+        btn.style.width = width;
+        btn.style.height = height;
+        btn.style.top = top;
+        btn.style.background = "transparent";
+        btn.style.border = "none";
+        btn.style.left = left;
+        btn.style.cursor = "pointer";
+        this.container.appendChild(btn);
 
     }
 
