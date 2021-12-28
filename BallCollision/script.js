@@ -68,7 +68,7 @@ function resolveCollision(particle, particle2) {
     var dy = circle2.y - circle1.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Check if collision exists
+
 
     // Calculate collision vector
     var vCollision = {
@@ -76,19 +76,19 @@ function resolveCollision(particle, particle2) {
         y: circle2.y - circle1.y,
     };
 
-    // Calculate distance of the collision vecotr
+    // Calculate distance of the collision vector
     var distance = Math.sqrt(
         (circle2.x - circle1.x) * (circle2.x - circle1.x) +
         (circle2.y - circle1.y) * (circle2.y - circle1.y)
     );
 
-    // Create normalized collisionvector to find direction
+    // Create normalized collision vector to find direction
     var vCollisionNorm = {
         x: vCollision.x / distance,
         y: vCollision.y / distance,
     };
 
-    // Calculate relative veloxity and speed
+    // Calculate relative velocity and speed
     var vRelativeVelocity = {
         x: circle1.vx - circle2.vx,
         y: circle1.vy - circle2.vy,
