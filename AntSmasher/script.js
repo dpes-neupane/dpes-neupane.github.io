@@ -55,9 +55,9 @@ let checkCollision = false;
  * 
  * 
  */
-function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
-    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-}
+// function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+//     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+// }
 
 
 
