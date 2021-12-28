@@ -7,7 +7,7 @@ canvas.width = 800;
 //load images
 const images = {};
 images.sprite = new Image();
-images.sprite.src = "./images/walk.png";
+images.sprite.src = "./Images/walk.png";
 
 
 
@@ -21,7 +21,7 @@ let spriteY = 0;
 
 const imagesBack = {};
 imagesBack.sprite = new Image();
-imagesBack.sprite.src = "./images/walk-down.png";
+imagesBack.sprite.src = "./Images/walk-down.png";
 let spriteFrameX1 = 2;
 let spriteFrameY1 = 0;
 let spriteX1 = 0;
@@ -54,9 +54,10 @@ let checkCollision = false;
  * 
  * 
  */
-// function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
-//     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-// }
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+}
+
 
 
 
