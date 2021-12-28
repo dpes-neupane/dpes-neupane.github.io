@@ -5,14 +5,21 @@ canvas.height = 600;
 let right = true;
 let move = false;
 const game = new Game(1, "./images/road.png");
+const player = new Player();
+game.makeAdverseries();
+let animationId = 0;
+let collided = false;
 
-
-window.addEventListener("keyup", (e) => {
+window.addEventListener("keydown", (e) => {
     switch (e.keyCode) {
         case 37:
             console.log('left');
             right = false;
             move = true;
+            player.currentPosition--;
+            if (player.currentPosition < 0) {
+                player.currentPosition = 0;
+            }
             break;
             // case 38:
             //     console.log('up');
@@ -21,6 +28,13 @@ window.addEventListener("keyup", (e) => {
             console.log('right');
             right = true;
             move = true;
+            player.currentPosition++;
+            if (player.currentPosition > 2) {
+                player.currentPosition = 2;
+            }
+
+
+
             break;
             // case 40:
             //     console.log('down')
@@ -29,19 +43,32 @@ window.addEventListener("keyup", (e) => {
 
 function init() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //now make a background
 
-    // game.drawBackGround();
+
+
     game.loopBackGround();
 
+    if (player.x < player.positions[player.currentPosition] && right) {
+        player.changePositionRight();
 
-    let player = new Player();
+    }
+    if (player.x > player.positions[player.currentPosition] && !right) {
+        player.changePositionLeft();
+    }
+
+    game.moveAdverseries();
+    collided = game.detectCollision(player, animationId);
     player.drawHitBox();
     player.placePlayer();
-    player.changePosition(0, right, move);
+    if (collided) {
+        console.log(collided);
+        cancelAnimationFrame(animationId);
+        return;
+    }
 
 
-    requestAnimationFrame(init);
+
+    animationId = requestAnimationFrame(init);
 }
 
 init();

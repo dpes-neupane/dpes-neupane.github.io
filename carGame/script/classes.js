@@ -8,7 +8,14 @@ class HitBox {
     }
     draw() {
         ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.fillStyle = "red";
         ctx.fill();
+    }
+    intersects(hitbox) {
+        return (this.x < hitbox.x + hitbox.w &&
+            this.x + this.w > hitbox.x &&
+            this.y < hitbox.y + hitbox.h &&
+            this.h + this.y > hitbox.y);
     }
 }
 
@@ -29,6 +36,7 @@ class Player {
         this.canvasRect = canvas.getBoundingClientRect();
         this.positions = [80, 230, 370];
         this.currentPosition = 0;
+        this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
 
     }
 
@@ -41,48 +49,57 @@ class Player {
     }
 
     drawHitBox() {
-        this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
+
         this.hitbox.draw();
     }
 
-    changePosition(currentPosition, right, move) {
-        this.currentPosition = currentPosition;
+    changePositionRight() {
+        this.x += 5;
 
+    }
 
-        if (move) {
-            if (right) {
+    changePositionLeft() {
+        this.x -= 5;
+    }
 
-                this.currentPosition = ++currentPosition;
-                if (this.currentPosition > 2) {
-                    this.currentPosition = 2;
-                }
-                if (this.x < this.positions[this.currentPosition]) {
-
-
-                    this.x += 5;
-                    this.placePlayer();
-                    console.log(this.x);
-
-                }
-
-            } else {
-                this.currentPosition = --currentPosition;
-                if (this.currentPosition < 0) {
-                    this.currentPosition = 0;
-                }
-                if (this.x > this.positions[this.currentPosition]) {
-                    this.x -= 5;
-                }
-            }
-        }
-
-
-
+    shootBullets() {
 
     }
 
 
 }
+
+
+
+
+class Adverseries {
+    constructor(x, y, w, h) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
+        this.image = new Image();
+        this.image.src = "./images/police-car-ulta.png";
+    }
+
+    placeAdverseries() {
+        ctx.drawImage(this.image, this.x, this.y);
+    }
+
+    drawHitBox() {
+        this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
+        this.hitbox.draw();
+
+    }
+    moveAdverseries() {
+        this.y += 1;
+
+
+    }
+}
+
+
 
 
 
@@ -98,7 +115,7 @@ class Game {
         this.x = 0;
         this.y = 0;
         this.y2 = 10;
-
+        this.adverseriesArr = [];
     }
     drawBackGround() {
         ctx.drawImage(this.backgroundImge, this.x, this.y, 500, 1000);
@@ -123,6 +140,43 @@ class Game {
 
 
     }
+
+
+    makeAdverseries() {
+        this.adverseries = new Adverseries(80, -50, 50, 101);
+        this.adverseriesArr.push(this.adverseries);
+
+
+
+
+
+
+    }
+    moveAdverseries() {
+        if (this.adverseries == undefined) return;
+        this.adverseries.drawHitBox();
+        this.adverseries.placeAdverseries();
+        this.adverseries.moveAdverseries();
+        if (this.adverseries.y > canvas.height) {
+            delete this.adverseries;
+            console.log("adverseries deleted");
+            this.makeAdverseries();
+        }
+    }
+
+    detectCollision(player, id) {
+        let collision = false;
+        this.adverseriesArr.forEach(element => {
+            if (element.hitbox.intersects(player)) {
+
+                collision = true;
+            }
+
+        })
+        return collision;
+
+    }
+
 
 
 
