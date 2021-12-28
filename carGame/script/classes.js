@@ -1,3 +1,10 @@
+/**
+ * Returns a random integer value between the minimum and maximum number.
+ * 
+ * @param {number} min -minimum value (inlusive)
+ * @param {number} max -maximum value (exclusive)
+ * @returns {number}
+ */
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -9,6 +16,15 @@ function getRandomInt(min, max) {
 
 
 class HitBox {
+
+    /**
+     * representation of the hit box object 
+     * 
+     * @param {number} x -x-coordinate 
+     * @param {number} y -y-coordinate
+     * @param {number} w -width of the hitbox
+     * @param {number} h -height of the hitbox
+     */
     constructor(x, y, w, h) {
         this.x = x;
         this.y = y;
@@ -16,11 +32,21 @@ class HitBox {
         this.h = h;
 
     }
+
+    //for drawing the hitbox
     draw() {
         ctx.fillRect(this.x, this.y, this.w, this.h);
         ctx.fillStyle = "red";
         ctx.fill();
     }
+
+
+    /**
+     * Checks if two hitboxes collide
+     * 
+     * @param {object} hitbox -a hitbox type object
+     * @returns {boolean}
+     */
     intersects(hitbox) {
         return (this.x < hitbox.x + hitbox.w &&
             this.x + this.w > hitbox.x &&
@@ -35,6 +61,10 @@ class HitBox {
 
 
 class Player {
+
+    /**
+     * represents the player with the starting coordinates and the necessary resources.
+     */
     constructor() {
         this.x = 80;
         this.y = 500;
@@ -75,6 +105,12 @@ class Player {
 
 
 class Bullet {
+    /**
+     * Represents the bullet projectile.
+     * 
+     * @param {number} x starting position of the bullet
+     * @param {number} y starting y-coordinate of the bullet
+     */
     constructor(x, y) {
         this.x = x + 20;
         this.y = y;
@@ -96,6 +132,12 @@ class Bullet {
 
 
 class Loot {
+    /**
+     * represents the loot box that can restore the ammo of the car.
+     * 
+     * @param {number} x -x-coordinate for placing the loot box
+     * @param {number} y -y-coordinate for placing the loot box
+     */
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -124,6 +166,14 @@ class Loot {
 
 
 class Adverseries {
+    /**
+     * Represents the police cars in the game
+     * 
+     * @param {number} x -x-coordinate for placing the adverseries
+     * @param {number} y -y-coordinate for placing the adverseries
+     * @param {number} w -width of the adverseries
+     * @param {number} h -height of the adverseries
+     */
     constructor(x, y, w, h) {
         this.x = x;
         this.y = y;
@@ -140,7 +190,7 @@ class Adverseries {
 
     drawHitBox() {
         this.hitbox = new HitBox(this.x, this.y, this.w, this.h);
-        // this.hitbox.draw();
+
 
     }
     moveAdverseries() {
@@ -157,6 +207,12 @@ class Adverseries {
 
 
 class CarGame {
+    /**
+     * Represents the car game, loads all the resources.    
+     * 
+     * @param {number} noOfPlayer -no of player that can be added to player--does not work
+     * @param {number} backgroundImge -the background Image for the game 
+     */
     constructor(noOfPlayer, backgroundImge) {
         this.noOfPlayer = noOfPlayer;
         this.backgroundImge = new Image();
@@ -164,11 +220,9 @@ class CarGame {
         this.players = [];
         for (let i = 0; i < this.noOfPlayer; i++) {
             let p = new Player();
-
             p.placePlayer();
             this.players.push(p);
 
-            //add--feature: player coordinates for multiple players
         }
         this.x = 0;
         this.y = 0;
@@ -186,7 +240,6 @@ class CarGame {
 
 
     loopBackGround() {
-
         ctx.drawImage(this.backgroundImge, this.x, this.y, );
         this.y += 2;
         ctx.drawImage(this.backgroundImge, this.x, this.y2 - 1000, );
@@ -207,6 +260,9 @@ class CarGame {
 
 
 
+    /**
+     * this method will make both loot and adverseries. is not very good generator of both things.
+     */
     makeAdverseriesAndLoot() {
         this.positionsX = [80, 230, 370];
         let addLoot = false;
@@ -235,28 +291,31 @@ class CarGame {
     }
 
 
-
+    /**for moving the things other than the player */
     moveAdverseriesandLoot() {
-        this.adverseriesArr.forEach(element => {
-            element.moveAdverseries();
+            this.adverseriesArr.forEach(element => {
+                element.moveAdverseries();
 
-        });
+            });
 
-        this.adverseriesArr = this.adverseriesArr.filter(element => {
-            return element.y < canvas.height;
-        });
-        this.lootArr.forEach(element => {
-            element.moveLoot();
+            this.adverseriesArr = this.adverseriesArr.filter(element => {
+                return element.y < canvas.height;
+            });
+            this.lootArr.forEach(element => {
+                element.moveLoot();
 
-        });
-        this.lootArr = this.lootArr.filter(element => {
-            return element.y < canvas.height;
-        });
-        this.makeAdverseriesAndLoot();
+            });
+            this.lootArr = this.lootArr.filter(element => {
+                return element.y < canvas.height;
+            });
+            this.makeAdverseriesAndLoot();
 
 
-    }
-
+        }
+        /**
+         * checks collision between the hitboxes of the player and the obstacles
+         * @returns {boolean}
+         */
     detectCollision() {
         let collision = false;
         this.adverseriesArr.forEach(element => {
@@ -269,6 +328,11 @@ class CarGame {
         return collision;
 
     }
+
+    /**
+     * Returns the index of the loot that is in the array of loots- if the player touched the loot
+     * @returns {number}
+     */
     detectLoot() {
         let collision = -1;
         this.lootArr.forEach((element, index) => {
@@ -290,6 +354,10 @@ class CarGame {
 
 
 class Game {
+    /**
+     * Represents the Game--has the main game loop.
+     * @param {HTMLelement} container -the div element that wraps the canvas
+     */
     constructor(container) {
         this.game = new CarGame(1, "./images/road.png");
         this.animationId = 0;
@@ -339,7 +407,9 @@ class Game {
         });
     }
 
-
+    /**
+     * This will start the game
+     */
     start() {
         ctx.fillText("Don't Smash the car!", 250, 90);
         ctx.font = "15px Comic Sans MS";
@@ -353,18 +423,24 @@ class Game {
 
 
     writeScore(score, ammo) {
-        score *= 10;
-        ctx.font = "30px Comic Sans MS";
-        ctx.fillText(Math.floor(score), 50, 30);
-        ctx.fillText(ammo, 450, 30);
+            score *= 10;
+            ctx.font = "30px Comic Sans MS";
+            ctx.fillText(Math.floor(score), 50, 30);
+            ctx.fillText(ammo, 450, 30);
 
-    }
-
+        }
+        /**this method will make sure the button will disappear before the game is started. */
     startGame() {
         this.deleteButton();
         this.gameLoop();
     }
 
+
+    /**
+     * The main game loop.
+     * 
+     * @returns null
+     */
     gameLoop() {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -374,7 +450,7 @@ class Game {
         this.collided = this.game.detectCollision();
         this.gotLoot = this.game.detectLoot();
 
-        this.game.players.forEach(element => {
+        this.game.players.forEach(element => { //for animating the positions
             // element.drawHitBox();
             element.placePlayer();
             if (element.x < element.positions[element.currentPosition] && this.right) {
@@ -395,7 +471,7 @@ class Game {
 
 
 
-        for (let i = 0; i < this.bulletArr.length; i++) {
+        for (let i = 0; i < this.bulletArr.length; i++) { //checks collision between bullet and the obstacles
             for (let j = 0; j < this.game.adverseriesArr.length; j++) {
 
                 if (this.bulletArr[i].hitbox.intersects(this.game.adverseriesArr[j])) {
@@ -411,7 +487,7 @@ class Game {
 
 
 
-        if (this.gotLoot > -1) {
+        if (this.gotLoot > -1) { //touched loot box
             this.game.lootArr.splice(this.gotLoot, 1);
             this.ammoLeft = 10;
             this.gotLoot = -1;
@@ -419,7 +495,7 @@ class Game {
 
         }
 
-        if (this.collided) {
+        if (this.collided) { //obstacle hit
             this.gameOver(this.animationId);
             return;
         }
@@ -440,7 +516,7 @@ class Game {
 
 
     }
-    restartButton() {
+    restartButton() { //for restarting the game
         this.collided = false;
         this.game = new CarGame(1, "./images/road.png");
         this.animationId = 0;
@@ -461,6 +537,17 @@ class Game {
         btn.remove();
     }
 
+
+    /**
+     * For creating a button for the game restart and start.
+     * 
+     * @param {function} action -an event that needs to happen when the button is clicked.
+     * @param {string} width -width of the button   
+     * @param {string} height -height of the button  
+     * @param {string} top -amount to be displaced from the top 
+     * @param {string} left -amount to be displaced from the left 
+     * @param {boolean} img -true if you want the restart icon 
+     */
     createButton(action, width, height, top, left, img) {
         let btn = document.createElement("button");
         if (img) {
