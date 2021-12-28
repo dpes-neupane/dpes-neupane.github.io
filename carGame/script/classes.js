@@ -220,7 +220,7 @@ class CarGame {
         this.players = [];
         for (let i = 0; i < this.noOfPlayer; i++) {
             let p = new Player();
-            p.placePlayer();
+
             this.players.push(p);
 
         }
@@ -453,7 +453,7 @@ class Game {
         this.gotLoot = this.game.detectLoot();
 
         this.game.players.forEach(element => { //for animating the positions
-            // element.drawHitBox();
+
             element.placePlayer();
             if (element.x < element.positions[element.currentPosition] && this.right) {
                 element.changePositionRight();
