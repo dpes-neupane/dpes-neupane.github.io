@@ -378,13 +378,26 @@ function startInterval(next, holdingTime) {
 
 
 
+//example code for multiple instances of the slider
+//the clearInterval has to be manually added to each slide 
 
+
+//val1 is an object which will have the initial slider Values and 
+//and the next function for changing the images at discrete times, 
+//the radioArr which contains the radio buttons.
 
 val1 = InitializeSliderContainer(sliderValues);
-console.log(val1);
+
 
 val2 = InitializeSliderContainer(sliderValues2);
-id1 = startInterval(val1.next, val1.holdingTime);
+
+
+//dynamic intervals between each images 
+let id1 = startInterval(val1.next, val1.holdingTime);
+
+
+
+//when the radio buttons are clicked they have to be resetted as:
 val1.radioArr.forEach(element => {
     element.addEventListener("click", () => {
         clearInterval(id1);
@@ -392,7 +405,7 @@ val1.radioArr.forEach(element => {
     })
 
 })
-id2 = startInterval(val2.next, val2.holdingTime);
+let id2 = startInterval(val2.next, val2.holdingTime);
 
 val2.radioArr.forEach(element => {
     element.addEventListener("click", () => {
