@@ -46,7 +46,6 @@ let checkCollision = false;
  * @param {number} sY - the y-coordinate of the image you want to draw 
  * @param {number} sW - the width of the image you want to draw 
  * @param {number} sH - the height of the image you want to draw 
-
  * @param {number} dX - the destination x-coordinate where you want to place the image
  * @param {number} dY - the destination y-coordinate where you want to place the image
  * @param {number} dW - the width of image when you place in the canvas
