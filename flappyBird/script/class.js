@@ -418,7 +418,7 @@ class Game {
         this.divider = getRandomInt(2, 6);
         this.collided = false;
         this.highscore = window.localStorage.getItem("highscore");
-        this.sG = false;
+
     }
 
 
@@ -428,8 +428,8 @@ class Game {
             switch (e.key) {
 
                 case this.key:
-                    this.sG = true;
-                    console.log(this.sG);
+
+
                     this.jump = true;
 
 
