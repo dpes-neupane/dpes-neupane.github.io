@@ -96,7 +96,7 @@ class Player {
         this.spriteNo = 0;
     }
     placePlayer() {
-        this.hitbox.draw();
+        this.ctx.drawImage(this.image, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.w, this.h);
 
     }
     movement(jump) {
@@ -114,7 +114,7 @@ class Player {
             this.animate();
 
             this.ctx.restore();
-            console.log("animate");
+
 
         } else {
             //rotate the sprite downwards when falling
@@ -243,7 +243,10 @@ class FlappyGame {
 
     }
 
+    drawBackground() {
+        this.ctx.drawImage(this.backgroundImge, this.x, this.y, this.canvas.width * 2, this.canvas.height);
 
+    }
 
     loopBackGround() {
         this.ctx.drawImage(this.backgroundImge, this.x, this.y, this.canvas.width * 2, this.canvas.height);
@@ -271,7 +274,6 @@ class FlappyGame {
         }
         if (lastPipe !== null) {
             diffBetnPipes = 610 - lastPipe[0].x; //get the difference between the last pipe and to be generated one
-            console.log(diffBetnPipes)
             if (diffBetnPipes < 80) { // make sure they do not stack on each other
                 return;
             }
@@ -306,11 +308,16 @@ class FlappyGame {
 
     }
 
-    movePipes() {
+    movePipes(score) {
+        let s = score;
         this.pipeArr.forEach(element => {
             element[0].movePipe();
+            if (element[0].x === 100) {
+                s += 1;
+            }
             element[1].movePipe();
         })
+        return s;
     }
 
 
@@ -366,7 +373,7 @@ class Game {
      * Represents the Game--has the main game loop.
      * @param {HTMLelement} container -the div element that wraps the canvas
      */
-    constructor(container) {
+    constructor(container, key) {
         this.containerCanvas = document.querySelector(container + " canvas");
         this.ctx = this.containerCanvas.getContext("2d");
         this.containerCanvas.width = 600;
@@ -378,28 +385,32 @@ class Game {
         this.game = new FlappyGame(1, "./assets/background/full-background.png", this.containerCanvas);
         this.ctx.textAlign = "center";
         this.jump = false;
-        // this.game.generatePipes();
+        this.key = key;
         this.counter = 1;
-        this.divider = getRandomInt(1, 6);
+        this.divider = getRandomInt(2, 6);
         this.collided = false;
         this.highscore = window.localStorage.getItem("highscore");
+        this.sG = false;
     }
 
 
     addEvents() {
         window.addEventListener("keydown", (e) => {
-            switch (e.keyCode) {
 
-                case 32:
+            switch (e.key) {
+
+                case this.key:
+                    this.sG = true;
+                    console.log(this.sG);
                     this.jump = true;
 
 
             }
         });
         window.addEventListener("keyup", (e) => {
-            switch (e.keyCode) {
+            switch (e.key) {
 
-                case 32:
+                case this.key:
                     this.jump = false;
 
 
@@ -412,9 +423,6 @@ class Game {
 
 
 
-    fun() {
-        console.log(this.container);
-    }
 
 
 
@@ -431,7 +439,7 @@ class Game {
         this.ctx.fillText("bird up", 300, 290);
         this.addEvents();
 
-        this.createButton(this.startGame, "100px", "20px", "55%", "46%", false);
+        this.createButton(this.startGame, "100px", "20px", "55%", "41%", false);
 
     }
 
@@ -448,8 +456,24 @@ class Game {
 
     /**this method will make sure the button will disappear before the game is started. */
     startGame() {
+
         this.deleteButton();
+
+
+        this.game.drawBackground();
+        this.game.players.forEach(element => {
+            console.log(element)
+            element.placePlayer();
+        });
+
+
         this.gameLoop();
+
+
+
+
+
+
     }
 
     /**
@@ -462,6 +486,7 @@ class Game {
         this.ctx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
         this.collided = this.game.detectCollision();
         this.game.loopBackGround();
+
         this.game.players.forEach(element => { //for animating the positions
 
 
@@ -472,28 +497,27 @@ class Game {
 
 
         this.game.pipeArr = this.game.pipeArr.filter(element => {
-
             return !(element[0].x < -70);
         })
 
 
 
 
-        this.game.movePipes();
+        this.score = this.game.movePipes(this.score);
 
 
-        if (this.collided || this.game.players[0].y >= 490) { //obstacle hit
+        if (this.collided || this.game.players[0].y >= 490 || this.game.players[0].y <= 0) { //obstacle hit
             this.gameOver();
             return;
         }
 
 
-        this.score += 1;
+        // this.score += 1;
         this.writeScore(this.score, this.highscore);
-        if (this.score % 10000 === 0) {
-            this.speed += 1;
+        // if (this.score % 10000 === 0) {
+        //     this.speed += 1;
 
-        }
+        // }
         if (this.score > this.highscore) {
             this.highscore = this.score;
         }
@@ -505,15 +529,16 @@ class Game {
             this.counter++;
 
         }
-        if (this.counter % this.divider === 0 || this.counter / this.divider >= 20) {
+        if (this.counter % this.divider === 0) {
             this.counter = 1;
             this.game.generatePipes();
-            this.divider = getRandomInt(1, 6);
+            this.divider = getRandomInt(2, 6);
         }
 
 
 
         requestAnimationFrame(this.gameLoop.bind(this));
+
 
     }
 
@@ -524,7 +549,7 @@ class Game {
         localStorage.setItem("highscore", this.highscore);
         this.ctx.fillText("Game Over", 300, 300);
         this.ctx.fillText("Play Again", 300, 350);
-        this.createButton(this.restartButton, "50px", "50px", "60%", "48%", true);
+        this.createButton(this.restartButton, "50px", "50px", "60%", "45%", true);
 
     }
 
@@ -545,7 +570,7 @@ class Game {
 
 
     deleteButton() {
-        let btn = document.querySelector("button");
+        let btn = document.querySelector("#" + this.container.id + "-btn");
 
         btn.remove();
     }
@@ -564,6 +589,7 @@ class Game {
      */
     createButton(action, width, height, top, left, img) {
         let btn = document.createElement("button");
+        btn.id = this.container.id + "-btn";
         if (img) {
             let btnImg = document.createElement("img");
             btn.append(btnImg);
