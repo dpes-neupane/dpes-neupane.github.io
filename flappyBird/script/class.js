@@ -95,10 +95,21 @@ class Player {
         this.angle = 45;
         this.spriteNo = 0;
     }
+
+    /**
+     * to draw the still image of the player
+     */
     placePlayer() {
         this.ctx.drawImage(this.image, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.w, this.h);
 
     }
+
+
+    /**
+     * It will move the player up if the up button is pressed else it will just make the player fall.
+     * 
+     * @param {boolean} jump -player pressed the up button 
+     */
     movement(jump) {
         this.speedY = this.speed * Math.sin(this.angle * Math.PI / 180);
         this.y += this.speedY;
@@ -137,7 +148,9 @@ class Player {
 
     }
 
-
+    /**
+     * for animating the player's sprite
+     */
     animate() {
         this.spriteNo %= 3;
         this.ctx.drawImage(this.image, this.sx, this.sy + SPRITEHEIGHT * this.spriteNo, this.sw, this.sh, 0, 0, this.w, this.h);
@@ -165,6 +178,18 @@ class Player {
 
 
 class Pipe {
+    /**
+     * represents a pipe in the game
+     * 
+     * @param {number} x -x-coordinate of the pipe
+     * @param {number} y -y-coordinate of the pipe
+     * @param {number} h -height of the pipe
+     * @param {object} context -canvas context object
+     * @param {number} sx -x-coordinate of the pipe in the spritesheet
+     * @param {number} sy -y-coordinate of the pipe in the spritesheet
+     * @param {number} sw -width of the sprite
+     * @param {number} sh -height of hte sprite
+     */
     constructor(x, y, h, context, sx, sy, sw, sh) {
         this.x = x;
         this.y = y;
@@ -180,12 +205,16 @@ class Pipe {
         this.sh = sh;
     }
 
-
+    /**
+     * for drawing the hitbox around the pipe.
+     */
     placePipes() {
         this.hitbox.draw();
     }
 
-
+    /**
+     * for moving the pipes towards the player
+     */
     movePipe() {
         this.x -= 2;
 
@@ -214,10 +243,11 @@ class Pipe {
 
 class FlappyGame {
     /**
-     * Represents the car game, loads all the resources.    
+     * Represents the flappy game, loads all the resources.    
      * 
      * @param {number} noOfPlayer -no of player that can be added to player--does not work
      * @param {number} backgroundImge -the background Image for the game 
+     * @param {object}-- canvas - canvas object
      */
     constructor(noOfPlayer, backgroundImge, canvas) {
         this.noOfPlayer = noOfPlayer;
@@ -226,22 +256,21 @@ class FlappyGame {
         this.players = [];
         for (let i = 0; i < this.noOfPlayer; i++) {
             let p = new Player(canvas, 180, 514, 26, 19);
-
             this.players.push(p);
 
         }
-        this.x = 0;
+        this.x = 0; //for drawing the background image
         this.y = 0;
-        this.x2 = canvas.width * 2;
-        this.pipeArr = [];
+        this.x2 = canvas.width * 2; // for drawing the second background image
+        this.pipeArr = []; //holds the obstacles of the game
         this.counter = 0;
         this.divider = getRandomInt(210, 300);
-        this.lootArr = [];
-        this.loot = 0;
+
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
 
     }
+
 
     drawBackground() {
         this.ctx.drawImage(this.backgroundImge, this.x, this.y, this.canvas.width * 2, this.canvas.height);
@@ -262,6 +291,7 @@ class FlappyGame {
         }
 
     }
+
     generatePipes() {
         //make sure the generated pipe is not very hard to pass through
         //and the further it gets built the more harder it should be to pass
@@ -294,17 +324,13 @@ class FlappyGame {
         }
 
 
-
-
         let pipeUp = new Pipe(610, 0, middleHeight, this.ctx, 87, 503, 42, 251);
         let diffBetPipe = getRandomInt(70, 100);
         let pipeDown = new Pipe(610, middleHeight + diffBetPipe, 490 - middleHeight - diffBetPipe + 30, this.ctx, 43, 505, 42, 251);
         if (this.pipeArr.length < 10) {
             this.pipeArr.push([pipeUp, pipeDown]);
 
-
         }
-
 
     }
 
@@ -371,7 +397,9 @@ class FlappyGame {
 class Game {
     /**
      * Represents the Game--has the main game loop.
+     * 
      * @param {HTMLelement} container -the div element that wraps the canvas
+     * @param {string} key- a string value, should be equal to js event.key values
      */
     constructor(container, key) {
         this.containerCanvas = document.querySelector(container + " canvas");
@@ -495,7 +523,7 @@ class Game {
 
         });
 
-
+        //for deleting the elements that are outside the game's boundaries
         this.game.pipeArr = this.game.pipeArr.filter(element => {
             return !(element[0].x < -70);
         })
@@ -512,12 +540,9 @@ class Game {
         }
 
 
-        // this.score += 1;
-        this.writeScore(this.score, this.highscore);
-        // if (this.score % 10000 === 0) {
-        //     this.speed += 1;
 
-        // }
+        this.writeScore(this.score, this.highscore);
+
         if (this.score > this.highscore) {
             this.highscore = this.score;
         }
