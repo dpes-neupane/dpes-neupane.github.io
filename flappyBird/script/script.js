@@ -1,6 +1,9 @@
-game = new Game("#container-1");
+game = new Game("#container-1", " ");
+game2 = new Game("#container-2", "ArrowUp");
 
-localStorage.setItem("highscore", "0");
+
+
+
+
 game.start();
-// game.addEvents();
-// game.gameLoop();
+game2.start();
