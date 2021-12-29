@@ -425,13 +425,15 @@ class Game {
 
 
     writeScore(score, ammo) {
-            score *= 10;
-            ctx.font = "30px Comic Sans MS";
-            ctx.fillText("SCORE: " + score, 250, 30);
-            ctx.fillText(ammo, 450, 30);
+        score *= 10;
+        ctx.font = "30px Comic Sans MS";
+        ctx.fillText("SCORE: " + score, 250, 30);
+        ctx.fillText(ammo, 450, 30);
 
-        }
-        /**this method will make sure the button will disappear before the game is started. */
+    }
+
+
+    /**this method will make sure the button will disappear before the game is started. */
     startGame() {
         this.deleteButton();
         this.gameLoop();
