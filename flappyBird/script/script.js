@@ -1,4 +1,4 @@
-game = new Game("#container-1", " ");
+game = new Game("#container-1", "space");
 game2 = new Game("#container-2", "ArrowUp");
 
 
