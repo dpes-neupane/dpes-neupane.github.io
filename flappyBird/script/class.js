@@ -420,6 +420,9 @@ class Game {
         this.counter = 1;
         this.divider = getRandomInt(2, 6);
         this.collided = false;
+        if (window.localStorage.getItem("highscore") === undefined) {
+            window.localStorage.setItem("highscore", "0");
+        }
         this.highscore = window.localStorage.getItem("highscore");
 
     }
