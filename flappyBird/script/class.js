@@ -414,6 +414,9 @@ class Game {
         this.ctx.textAlign = "center";
         this.jump = false;
         this.key = key;
+        if (this.key === "space") {
+            this.key = " ";
+        }
         this.counter = 1;
         this.divider = getRandomInt(2, 6);
         this.collided = false;
@@ -463,7 +466,13 @@ class Game {
         this.ctx.font = "30px Comic Sans MS";
         this.ctx.fillText("Flappy Bird", 300, 90);
         this.ctx.font = "15px Comic Sans MS";
-        this.ctx.fillText("To play this game, use the spacebar to move  the", 300, 270);
+        if (this.key === " ") {
+            this.ctx.fillText("To play this game, use the " + "space" + " to move  the", 300, 270);
+
+        } else {
+            this.ctx.fillText("To play this game, use the " + this.key + " to move  the", 300, 270);
+
+        }
         this.ctx.fillText("bird up", 300, 290);
         this.addEvents();
 
