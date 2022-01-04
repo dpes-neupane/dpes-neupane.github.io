@@ -6,6 +6,7 @@ let moveUP = 0;
 let moveDown = 0;
 let moveLeft = 0;
 let moveRight = 0;
+let mousemove = [];
 
 var img = new Image();
 // img.onload = function() {
@@ -44,22 +45,40 @@ window.addEventListener("keydown", (e) => {
             moveRight = true;
             break;
     }
-})
+});
 
 
-let player = new Player(500, 250);
+
+
+let player = new Player(210, 350);
+let boundary = new Boundary(300, 300, 20, 200);
+player.createRays();
+let boundaries = [boundary];
+
+
 
 function init() {
     context.clearRect(0, 0, canvas.width, canvas.height);
+    boundary.draw();
+    let points = player.checkCollision(boundaries);
 
     rays = player.createRays();
-    // console.log(player.dir);
 
+    points.forEach(element => {
+        context.beginPath();
+        context.arc(element[0].x, element[0].y, 2, 0, 2 * Math.PI, false);
+        context.strokeStyle = "blue";
+
+        context.stroke();
+
+    })
     player.movePlayer(moveLeft, moveRight, moveDown, moveUP);
+
     moveDown = false;
     moveLeft = false;
     moveRight = false;
     moveUP = false;
+
     requestAnimationFrame(init);
 }
 
