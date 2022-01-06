@@ -12,7 +12,7 @@ var img = new Image();
 // img.onload = function() {
 //     knockoutAndRefill(50, 200, 700, 50, 75, 350);
 // };
-img.src = './images/map.png';
+img.src = './images/wall2.png';
 
 
 
@@ -49,8 +49,8 @@ function init() {
 
 
 
-    // context.fillRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    // context.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
     let tiles = map.makeMap();
 
 

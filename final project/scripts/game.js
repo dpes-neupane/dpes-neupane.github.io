@@ -56,8 +56,8 @@ class Player {
         this.dir = Math.atan(0);
         this.spriteImage = new Image();
         this.spriteImage.src = "./images/wizard.png";
-        this.width = 10;
-        this.height = 20;
+        this.width = 20;
+        this.height = 40;
         this.boundary = new Boundary(this.x - 10, this.y - 10, this.width, this.height);
 
     }
@@ -103,9 +103,7 @@ class Player {
 
     movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles) {
 
-        if (this.collisionWithWalls(tiles)) {
-            console.log(this.x);
-        }
+
         if (moveLeft) {
 
             this.x -= 2;

@@ -4,10 +4,12 @@ class Map {
         this.y = 0;
         this.width = canvas.width;
         this.height = canvas.height;
+        this.img = new Image();
+        this.img.src = "./images/cement-wall.png";
         this.map1 = {
             cols: 20,
             rows: 20,
-            tsize: 400,
+            tsize: 100,
             tiles: [
                 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -35,31 +37,31 @@ class Map {
 
 
 
-            ]
-        }
+            ],
+            getElement: function(col, row, map) {
+                return this.tiles[row * map.cols + col];
+            }
+
+        };
 
     }
     makeMap() {
-        let tile = new Tile(this.x + 100, this.y + 100);
-        tile.drawTile();
+        let tiles = [];
+        for (let i = 0; i < this.map1.cols; i++) {
+            for (let j = 0; j < this.map1.rows; j++) {
+                let tile = this.map1.getElement(i, j, this.map1);
+                if (tile === 1) {
+                    // context.drawImage(this.img, 0, 0, 145, 153, i * this.map1.tsize, j * this.map1.tsize, this.map1.tsize, this.map1.tsize);
+                } else {
+                    let boundary = new Tile(i * this.map1.tsize, j * this.map1.tsize);
+                    tiles.push(boundary);
+                }
 
-        let tile2 = new Tile(this.x + 100, this.y + 132);
-        tile2.drawTile();
-
-        let tiles = [tile, tile2];
-        for (let i = 0; i < canvas.height; i += 32) {
-            tile = new Tile(this.x, i);
-            tile.drawTile();
-
-            tiles.push(tile);
-        }
-        for (let i = 12; i < canvas.width; i += 12) {
-            tile = new Tile(i, this.y);
-            tile.drawTile();
-            tiles.push(tile);
+            }
         }
         return tiles;
     }
+
 }
 
 
@@ -70,8 +72,8 @@ class Tile {
         this.y = y;
         this.image = new Image();
         this.image.src = "./images/Tile.png";
-        this.width = 12;
-        this.height = 12;
+        this.width = 100;
+        this.height = 100;
         this.boundary = new Boundary(this.x, this.y, this.width, this.height);
 
     }
