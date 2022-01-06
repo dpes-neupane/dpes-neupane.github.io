@@ -5,8 +5,20 @@ class Boundary {
         this.w = w;
         this.h = h;
     }
-    draw() {
+    draw(color) {
+        if (color) {
+            context.fillStyle = color;
+        } else {
+            context.fillStyle = "grey";
+
+        }
         context.fillRect(this.x, this.y, this.w, this.h);
-        context.fillStyle = "red";
+
+    }
+    intersects(boundary) {
+        return (this.x < boundary.x + boundary.w + 1 &&
+            this.x + this.w + 1 > boundary.x &&
+            this.y < boundary.y + boundary.h + 1 &&
+            this.h + this.y + 1 > boundary.y);
     }
 }

@@ -4,17 +4,30 @@ class Ray {
         this.y = y;
         this.xdir = Math.cos(angle * (Math.PI / 180));
         this.ydir = Math.sin(angle * (Math.PI / 180));
+        this.endpointX = this.x + this.xdir * 100;
+        this.endpointY = this.y + this.ydir * 100;
 
     }
-    collides(boundaries) {
-        let intersects = [];
-        boundaries.forEach(element => {
+    collides(tiles) {
+        let intersects;
 
-            let point = this.liangBarsky(element);
-            if (point !== null) {
-                intersects.push(point);
+        tiles.forEach(element => {
+
+            let point = this.liangBarsky(element.boundary);
+            if (point !== null && point != undefined) {
+                // element.draw("red");
+                if (intersects === undefined)
+                    intersects = point;
+                else {
+                    let d1 = getDistance(this.x, this.y, intersects.x, intersects.y);
+                    let d2 = getDistance(this.x, this.y, point.x, point.y);
+                    if (d1 > d2) {
+                        intersects = point;
+                    }
+                }
             }
         });
+
         return intersects;
     }
 
