@@ -59,6 +59,7 @@ class Player {
         this.width = 20;
         this.height = 40;
         this.boundary = new Boundary(this.x - 10, this.y - 10, this.width, this.height);
+        this.speed = 5;
 
     }
     createRays() {
@@ -106,26 +107,26 @@ class Player {
 
         if (moveLeft) {
 
-            this.x -= 2;
+            this.x -= this.speed;
             this.dir = 180 * Math.PI / 180;
 
 
         }
         if (moveRight) {
-            this.x += 2;
+            this.x += this.speed;
             this.dir = 0;
 
 
 
         }
         if (moveDown) {
-            this.y += 2;
+            this.y += this.speed;
             this.dir = 90 * Math.PI / 180;
 
 
         }
         if (moveUP) {
-            this.y -= 2;
+            this.y -= this.speed;
             this.dir = 270 * Math.PI / 180;
 
 
@@ -161,40 +162,40 @@ class Player {
 
 
     drawRays() {
-        // context.beginPath();
+        context.beginPath();
 
-        // context.strokeStyle = "white";
+        context.strokeStyle = "white";
 
-        // context.moveTo(this.x, this.y);
+        context.moveTo(this.x, this.y);
 
-        // context.moveTo(this.x, this.y);
-        // context.lineTo(this.rays[0].endpointX, this.rays[0].endpointY);
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.rays[0].endpointX, this.rays[0].endpointY);
 
-        // context.stroke();
-
-
+        context.stroke();
 
 
 
 
-        // for (let i = 1; i < this.rays.length - 1; i++) {
 
 
-        //     context.moveTo(this.x, this.y);
-        //     context.lineTo(this.rays[i].endpointX, this.rays[i].endpointY);
+        for (let i = 1; i < this.rays.length - 1; i++) {
 
 
-        // }
-        // context.lineTo(this.rays[this.rays.length - 1].endpointX, this.rays[this.rays.length - 1].endpointY);
-        // context.closePath();
-        // // context.fill();
-        // context.stroke();
+            context.moveTo(this.x, this.y);
+            context.lineTo(this.rays[i].endpointX, this.rays[i].endpointY);
+
+
+        }
+        context.lineTo(this.rays[this.rays.length - 1].endpointX, this.rays[this.rays.length - 1].endpointY);
+        context.closePath();
+        // context.fill();
+        context.stroke();
 
         // for (let i = 1; i < this.rays.length; i++) {
         //     knockoutAndRefill(this.x, this.y, this.rays[i - 1].endpointX, this.rays[i - 1].endpointY, this.rays[i].endpointX, this.rays[i].endpointY);
         // }
         // knockoutAndRefill(this.x, this.y, this.rays[0].endpointX, this.rays[0].endpointY, this.rays[this.rays.length - 3].endpointX, this.rays[this.rays.length - 3].endpointY);
-        knockoutAndRefill(this.x, this.y, this.rays);
+        // knockoutAndRefill(this.x, this.y, this.rays);
 
 
 

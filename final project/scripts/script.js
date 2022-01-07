@@ -9,10 +9,8 @@ let moveRight = 0;
 let mousemove = [];
 
 var img = new Image();
-// img.onload = function() {
-//     knockoutAndRefill(50, 200, 700, 50, 75, 350);
-// };
-img.src = './images/wall2.png';
+
+img.src = './images/map.png';
 
 
 
@@ -38,10 +36,10 @@ window.addEventListener("keydown", (e) => {
 
 
 
-let player = new Player(150, 150);
+let player = new Player(10, 10);
 
-let map = new Map(canvas);
-
+let map = new Map(canvas, player);
+// let tiles = map.makeMap();
 
 
 function init() {
@@ -50,18 +48,26 @@ function init() {
 
 
     context.fillRect(0, 0, canvas.width, canvas.height);
-    // context.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-    let tiles = map.makeMap();
+    // context.drawImage(img, 0, 0, 500, 400, 0, 0, canvas.width, canvas.height);
+    let tiles = map.drawPartOfMap(player);
+    // console.log(tiles);
 
 
 
 
 
-
-
+    let movement = map.checkMovement(player, moveLeft, moveRight, moveDown, moveUP);
+    if (movement) {
+        moveDown = movement.moveDown;
+        moveLeft = movement.moveLeft;
+        moveRight = movement.moveRight;
+        moveUP = movement.moveUP;
+        // console.log(movement.moveDown, movement.moveLeft, movement.moveRight, movement.moveUP)
+    }
 
     player.movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles);
-    player.draw(tiles);
+    player.draw(tiles.tiles);
+
     moveDown = false;
     moveLeft = false;
     moveRight = false;
