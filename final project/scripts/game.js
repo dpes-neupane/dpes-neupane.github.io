@@ -62,15 +62,17 @@ class Player {
         this.speed = 5;
         this.tilePositionX = 1;
         this.tilePositionY = 1;
+        this.image = new Image();
+        this.image.src = "./images/only-walls-y.png";
 
     }
     createRays() {
         this.rays = [];
         for (let i = 30; i > 0; i -= 3) {
-            this.rays.push(new Ray(this.x, this.y, (this.dir * 180 / Math.PI) + i));
+            this.rays.push(new Ray(this.x, this.y, (this.dir * 180 / Math.PI) + i, 150));
         }
         for (let i = 0; i >= -30; i -= 3) {
-            this.rays.push(new Ray(this.x, this.y, (this.dir * 180 / Math.PI) + i));
+            this.rays.push(new Ray(this.x, this.y, (this.dir * 180 / Math.PI) + i, 150));
         }
 
 
@@ -96,7 +98,7 @@ class Player {
         this.checkCollision(tiles);
 
         this.drawRays();
-        this.boundary.draw();
+        // this.boundary.draw();
 
         this.drawSprite();
         context.fillStyle = "black";
@@ -148,12 +150,12 @@ class Player {
     }
 
     checkCollision(tiles) {
-        let points = [];
+
 
         this.rays.forEach(element => {
             let point = element.collides(tiles);
             if (point !== undefined) {
-                points.push(point);
+
 
                 element.endpointX = point.x;
                 element.endpointY = point.y;
@@ -179,7 +181,7 @@ class Player {
 
         // context.moveTo(this.x, this.y);
 
-        // context.moveTo(this.x, this.y);
+
         // context.lineTo(this.rays[0].endpointX, this.rays[0].endpointY);
 
         // context.stroke();
@@ -206,7 +208,7 @@ class Player {
         //     knockoutAndRefill(this.x, this.y, this.rays[i - 1].endpointX, this.rays[i - 1].endpointY, this.rays[i].endpointX, this.rays[i].endpointY);
         // }
         // knockoutAndRefill(this.x, this.y, this.rays[0].endpointX, this.rays[0].endpointY, this.rays[this.rays.length - 3].endpointX, this.rays[this.rays.length - 3].endpointY);
-        knockoutAndRefill(this.x, this.y, this.rays);
+        this.knockoutAndRefill(this.x, this.y, this.rays);
 
 
 
@@ -228,6 +230,22 @@ class Player {
             }
         });
         return collides;
+    }
+    knockoutAndRefill() {
+        context.save();
+
+
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        this.rays.forEach(element => {
+            context.lineTo(element.endpointX, element.endpointY);
+
+        })
+
+        context.closePath();
+        context.clip();
+        context.drawImage(this.image, 0, 0);
+        context.restore();
     }
 
 
@@ -271,22 +289,81 @@ class Demon {
 
 
 class Light {
-    constructor(x, y) {
+    constructor(x, y, noOfTilesAtOneAxis) {
         this.x = x;
         this.y = y;
-
+        this.rays = [];
+        this.tilePositionX = Math.floor(this.x / noOfTilesAtOneAxis);
+        this.tilePositionY = Math.floor(this.y / noOfTilesAtOneAxis);
+        this.image = new Image();
+        this.image.src = "./images/only-walls-1.png";
+        this.spriteImage = new Image();
+        this.spriteImage.src = "./images/LightEffect.png";
     }
-    shine() {
+    shine(tiles) {
+
+        this.createRays();
+        context.fillStyle = "white";
+        this.rays.forEach(element => {
+            let point = element.collides(tiles);
+            if (point !== undefined) {
+
+
+                element.endpointX = point.x;
+                element.endpointY = point.y;
+
+
+            }
+
+        });
+        this.knockoutAndRefill(this.x, this.y, this.rays);
+
 
     }
     createRays() {
         this.rays = [];
-        for (let i = 0; i < 360; i += 10) {
-            this.rays.push(new Ray(this.x, this.y, (this.dir * 180 / Math.PI) + i));
+        for (let i = 0; i <= 360; i += 10) {
+            this.rays.push(new Ray(this.x, this.y, i, 90));
         }
 
 
 
         return this.rays;
+    }
+    drawSprite() {
+        context.drawImage(this.spriteImage, 0, 0, 150, 150, this.x - 22, this.y - 28, 50, 50);
+    }
+
+
+
+
+
+    knockoutAndRefill() {
+        context.save();
+
+
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        this.rays.forEach(element => {
+            context.lineTo(element.endpointX, element.endpointY);
+
+        })
+
+        context.closePath();
+
+        context.clip();
+        context.drawImage(this.image, 0, 0);
+        context.restore();
+    }
+
+
+}
+
+
+class Projectile {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.boundary = new Boundary(this.x, this.y, 10, 10);
     }
 }

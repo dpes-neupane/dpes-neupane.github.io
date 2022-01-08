@@ -53,33 +53,58 @@ class Map {
         let positionY = (player.y - this.y);
         let tilePositionX = player.tilePositionX;
         let tilePositionY = player.tilePositionY;
-        let currentTile = this.map1.getElement(tilePositionX, tilePositionY, this.map1);
-        let up = Math.floor((positionY - 20) / this.map1.tsize);
-        let down = Math.floor((positionY + 35) / this.map1.tsize);
-        let left = Math.floor((positionX - 20) / this.map1.tsize);
-        let right = Math.floor((positionX + 20) / this.map1.tsize);
 
-        let tileUp = this.map1.getElement(tilePositionX, up, this.map1);
-        let tileDown = this.map1.getElement(tilePositionX, down, this.map1);
-        let tileLeft = this.map1.getElement(left, tilePositionY, this.map1);
-        let tileRight = this.map1.getElement(right, tilePositionY, this.map1);
-        if (tileUp !== 1) {
-            moveUP = false;
+        if (positionX % this.map1.tsize <= 10 || positionX % this.map1.tsize >= 90) {
+
+            //check if the player position is in the left or right
+            let leftDist = positionX - (tilePositionX * this.map1.tsize); //distance from the current position of player and current tile (x, y) coordinate
+            let rightDist = ((tilePositionX + 1) * this.map1.tsize) - positionX + player.width; // distance from the current position of player and the next right tile coordinate
+            let tileValueLeft;
+            let tileValueRight;
+
+            // console.log(leftDist, rightDist, tilePositionX);
+
+            if (leftDist < rightDist) { //if the distance between the current tile and player position is less than the right it is in the left side of the current tile
+                tileValueLeft = this.map1.getElement(tilePositionX - 1, tilePositionY, this.map1);
+                if (tileValueLeft !== 1) {
+                    moveLeft = false;
+                }
+            } else {
+                tileValueRight = this.map1.getElement(tilePositionX + 1, tilePositionY, this.map1);
+
+                if (tileValueRight !== 1) {
+                    moveRight = false;
+                }
+            }
+
+
+
+
+
+
 
         }
-        if (tileDown !== 1) {
-            moveDown = false;
+        if (positionY % this.map1.tsize <= 10 || positionY % this.map1.tsize >= 90) {
+            //same idea as the left-right one
+            let upDist = positionY - (tilePositionY * this.map1.tsize);
+            let downDist = ((tilePositionY + 1) * this.map1.tsize) - positionY + player.height;
+            let tileValueDown;
+            let tileValueUp;
+
+            if (upDist > downDist) {
+                tileValueDown = this.map1.getElement(tilePositionX, tilePositionY + 1, this.map1);
+                if (tileValueDown !== 1) {
+                    moveDown = false;
+                }
+            } else {
+                tileValueUp = this.map1.getElement(tilePositionX, tilePositionY - 1, this.map1);
+                if (tileValueUp !== 1) {
+                    moveUP = false;
+                }
+            }
+
 
         }
-        if (tileLeft !== 1) {
-            moveLeft = false;
-
-        }
-        if (tileRight !== 1) {
-            moveRight = false;
-
-        }
-
 
 
         return {
@@ -105,6 +130,7 @@ class Map {
         let tilePositionX = player.tilePositionX;
         let tilePositionY = player.tilePositionY;
 
+
         // let tilePositionX = Math.floor(positionX / this.map1.tsize);
         // let tilePositionY = Math.floor(positionY / this.map1.tsize);
 
@@ -116,7 +142,7 @@ class Map {
                     this.tiles.push(boundary);
                 } else {
                     let tile = new Tile(i * this.map1.tsize + this.x, j * this.map1.tsize + this.y);
-                    tile.drawTile();
+                    // tile.drawTile();
                 }
 
 
@@ -129,8 +155,7 @@ class Map {
 
         return {
             tiles: this.tiles,
-            x: player.x,
-            y: player.y
+
         };
     }
 

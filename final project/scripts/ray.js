@@ -1,11 +1,12 @@
 class Ray {
-    constructor(x, y, angle) {
+    constructor(x, y, angle, raysize) {
         this.x = x;
         this.y = y;
+
         this.xdir = Math.cos(angle * (Math.PI / 180));
         this.ydir = Math.sin(angle * (Math.PI / 180));
-        this.endpointX = this.x + this.xdir * 200;
-        this.endpointY = this.y + this.ydir * 200;
+        this.endpointX = this.x + this.xdir * raysize;
+        this.endpointY = this.y + this.ydir * raysize;
 
     }
     collides(tiles) {
