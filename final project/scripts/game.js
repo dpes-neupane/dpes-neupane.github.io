@@ -106,7 +106,7 @@ class Player {
 
     }
 
-    movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles) {
+    movePlayer(moveLeft, moveRight, moveDown, moveUP) {
 
 
         if (moveLeft) {
@@ -425,12 +425,22 @@ class Projectile {
         this.y = y;
         this.boundary = new Boundary(this.x, this.y, 10, 10);
         this.spriteImage = new Image();
-        this.spriteImage.src = "./images/Fireball2.png";
+        if (direction === 2) {
+            this.spriteImage.src = "./images/Fireball2.png";
+        } else if (direction === 3) {
+            this.spriteImage.src = "./images/Fireball3.png";
+        } else if (direction === 4) {
+            this.spriteImage.src = "./images/Fireball4.png";
+        } else {
+            this.spriteImage.src = "./images/Fireball1.png";
+
+        }
         this.speed = 1;
         this.direction = direction;
     }
     drawSprite() {
         // this.boundary.draw();
+
         context.drawImage(this.spriteImage, 0, 0, 16, 16, this.x - 5, this.y - 4, 16, 16);
 
     }
