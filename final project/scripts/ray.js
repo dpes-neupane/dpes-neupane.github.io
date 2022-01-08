@@ -78,7 +78,9 @@ class Ray {
         if (t1 < t2) {
             return {
                 x: x1 + t1 * delX,
-                y: y1 + t1 * delY
+                y: y1 + t1 * delY,
+                x2: x1 + t2 * delX,
+                y2: y1 + t2 * delY
             }
 
         }

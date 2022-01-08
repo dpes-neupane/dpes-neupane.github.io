@@ -14,6 +14,19 @@ function getDistance(x1, y1, x2, y2) {
 
 }
 
+/**
+ * Returns a random integer value between the minimum and maximum number.
+ * 
+ * @param {number} min -minimum value (inlusive)
+ * @param {number} max -maximum value (exclusive)
+ * @returns number
+ */
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
 
 // function knockoutAndRefill(x0, y0, x1, y1, x2, y2) {
 //     context.save();
@@ -121,12 +134,12 @@ class Player {
                 this.spriteNox %= 5;
             }
             this.spriteImage.src = this.images[0];
-
-            this.x -= this.speed;
-            this.dir = 180 * Math.PI / 180;
             if (this.x % 100 === 0) {
                 this.tilePositionX--;
             }
+            this.x -= this.speed;
+            this.dir = 180 * Math.PI / 180;
+
 
 
 
@@ -156,22 +169,25 @@ class Player {
             }
             if (this.y % 2 === 0) {
                 this.spriteNox++;
-                this.spriteNox %= 4;
             }
+            this.spriteNox %= 4;
+
             this.spriteImage.src = this.images[2];
 
         }
         if (moveUP) {
-            this.y -= this.speed;
-            this.dir = 270 * Math.PI / 180;
-
             if (this.y % 100 === 0) {
                 this.tilePositionY--;
             }
+            this.y -= this.speed;
+            this.dir = 270 * Math.PI / 180;
+
+
             if (this.y % 2 === 0) {
                 this.spriteNox++;
-                this.spriteNox %= 4;
             }
+            this.spriteNox %= 4;
+
             this.spriteImage.src = this.images[3];
 
         }
@@ -251,18 +267,7 @@ class Player {
 
     }
 
-    collisionWithWalls(tiles) {
-        let collides = false;
 
-        tiles.forEach(element => {
-
-            if (this.boundary.intersects(element.boundary)) {
-
-                collides = true;
-            }
-        });
-        return collides;
-    }
     knockoutAndRefill() {
         context.save();
 
@@ -502,8 +507,21 @@ class Key {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.w = 10;
-        this.h = 10;
+        this.w = 20;
+        this.h = 20;
+        this.boundary = new Boundary(this.x, this.y, this.w, this.h);
+        this.image = new Image();
+        this.image.src = "./images/KeyIcons.png";
+        this.spriteW = 32;
+        this.spriteH = 32;
+    }
+
+    drawKey(player) {
+        let dist = getDistance(player.x, player.y, this.x, this.y);
+        // console.log(dist);
+        if (dist <= 40) {
+            context.drawImage(this.image, 0, 0, this.spriteW, this.spriteH, this.x, this.y, this.w, this.h);
+        }
     }
 
 }

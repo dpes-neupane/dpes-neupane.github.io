@@ -54,22 +54,23 @@ class Map {
         let tilePositionX = player.tilePositionX;
         let tilePositionY = player.tilePositionY;
 
-        if (positionX % this.map1.tsize <= 10 || positionX % this.map1.tsize >= 90) {
+        if (positionX % this.map1.tsize <= 10) {
 
             //check if the player position is in the left or right
-            let leftDist = positionX - (tilePositionX * this.map1.tsize); //distance from the current position of player and current tile (x, y) coordinate
-            let rightDist = ((tilePositionX + 1) * this.map1.tsize) - positionX + player.width; // distance from the current position of player and the next right tile coordinate
+            // let leftDist = positionX - (tilePositionX * this.map1.tsize); //distance from the current position of player and current tile (x, y) coordinate
+            // let rightDist = ((tilePositionX + 1) * this.map1.tsize) - positionX + player.width; // distance from the current position of player and the next right tile coordinate
             let tileValueLeft;
-            let tileValueRight;
 
-            // console.log(leftDist, rightDist, tilePositionX);
 
-            if (leftDist < rightDist) { //if the distance between the current tile and player position is less than the right it is in the left side of the current tile
-                tileValueLeft = this.map1.getElement(tilePositionX - 1, tilePositionY, this.map1);
-                if (tileValueLeft !== 1) {
-                    moveLeft = false;
-                }
-            } else {
+            // if (leftDist < rightDist) { //if the distance between the current tile and player position is less than the right it is in the left side of the current tile
+            tileValueLeft = this.map1.getElement(tilePositionX - 1, tilePositionY, this.map1);
+            // console.log(positionX, tileValueLeft, tilePositionX);
+
+            if (tileValueLeft !== 1) {
+                moveLeft = false;
+            } else if (positionX % this.map1.tsize >= 90) {
+                let tileValueRight;
+
                 tileValueRight = this.map1.getElement(tilePositionX + 1, tilePositionY, this.map1);
 
                 if (tileValueRight !== 1) {
@@ -130,6 +131,8 @@ class Map {
         let tilePositionX = player.tilePositionX;
         let tilePositionY = player.tilePositionY;
 
+        let keyTilePositionX = getRandomInt(0, 100);
+        let keyTilePositionY = getRandomInt(0, 100);
 
         // let tilePositionX = Math.floor(positionX / this.map1.tsize);
         // let tilePositionY = Math.floor(positionY / this.map1.tsize);

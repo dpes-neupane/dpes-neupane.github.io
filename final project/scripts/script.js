@@ -45,7 +45,7 @@ let demon1 = new Demon(320, 650, 50, 50, 1);
 let light1 = new Light(310, 660, 10);
 let demon2 = new Demon(500, 470, 50, 50, 4);
 let light2 = new Light(510, 520, 10);
-
+let key = new Key(20, 20);
 let demon3 = new Demon(950, 290, 50, 50, 2);
 let light3 = new Light(985, 290, 10);
 demon.generateFireBall();
@@ -66,7 +66,6 @@ function init() {
     context.fillStyle = "black";
     context.fillRect(0, 0, canvas.width, canvas.height);
     // context.drawImage(img, 0, 0, 500, 400, 0, 0, canvas.width, canvas.height);
-
     let tiles = map.drawPartOfMap(player);
     light.shine(tiles.tiles);
     light1.shine(tiles.tiles);
@@ -88,6 +87,8 @@ function init() {
     player.movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles);
 
     player.draw(tiles.tiles);
+    key.drawKey(player);
+
     light.drawSprite();
     light1.drawSprite();
     light2.drawSprite();
