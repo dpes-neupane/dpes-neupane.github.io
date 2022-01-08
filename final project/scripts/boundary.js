@@ -16,9 +16,9 @@ class Boundary {
 
     }
     intersects(boundary) {
-        return (this.x < boundary.x + boundary.w + 1 &&
-            this.x + this.w + 1 > boundary.x &&
-            this.y < boundary.y + boundary.h + 1 &&
-            this.h + this.y + 1 > boundary.y);
+        return (this.x < boundary.x + boundary.w &&
+            this.x + this.w > boundary.x &&
+            this.y < boundary.y + boundary.h &&
+            this.h + this.y > boundary.y);
     }
 }

@@ -48,6 +48,15 @@ let light2 = new Light(510, 520, 10);
 
 let demon3 = new Demon(950, 290, 50, 50, 2);
 let light3 = new Light(985, 290, 10);
+demon.generateFireBall();
+demon.periodicFireBall(4000);
+demon1.generateFireBall();
+demon1.periodicFireBall(3000);
+demon2.generateFireBall();
+demon2.periodicFireBall(4000);
+demon3.generateFireBall();
+demon3.periodicFireBall(3000);
+
 
 
 function init() {
@@ -84,9 +93,18 @@ function init() {
     light2.drawSprite();
     light3.drawSprite();
     demon.drawSprite();
+
     demon1.drawSprite();
     demon2.drawSprite();
     demon3.drawSprite();
+
+    let collided1 = demon.shootFireBall(player);
+    let collided2 = demon1.shootFireBall(player);
+    let collided3 = demon2.shootFireBall(player);
+    let collided4 = demon3.shootFireBall(player);
+    if (collided1 || collided2 || collided3 || collided4) {
+        return;
+    }
     moveDown = false;
     moveLeft = false;
     moveRight = false;

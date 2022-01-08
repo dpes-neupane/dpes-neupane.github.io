@@ -259,11 +259,19 @@ class Demon {
         this.y = y;
         this.w = w;
         this.h = h;
-        this.boundary = new Boundary(this.x, this.y, this.w, this.h);
+
+        if (spriteNo === 2) {
+            this.boundary = new Boundary(this.x + 20, this.y, this.w - 20, this.h - 5);
+        } else if (spriteNo === 4) {
+            this.boundary = new Boundary(this.x, this.y, 32, this.h);
+        } else {
+            this.boundary = new Boundary(this.x, this.y + 5, this.w, this.h - 10);
+        }
+
         this.image = new Image();
         this.image.src = "./images/demon.png";
         this.spriteNo = spriteNo;
-
+        this.projectile = [];
     }
 
 
@@ -271,18 +279,66 @@ class Demon {
 
     drawSprite() {
         let i = 0,
+            width = 64,
+            height = 64,
             j = 10;
+        let dw = this.w,
+            dh = this.h;
         if (this.spriteNo === 2) {
             j = 64;
+
+
+
+
         } else if (this.spriteNo === 3) {
             j = 128;
         } else if (this.spriteNo === 4) {
             j = 192;
+            width = 32;
+            dw = 32;
+
         }
-        context.drawImage(this.image, i, j, 64, 64, this.x, this.y, this.w, this.h);
+        // this.boundary.draw();
+        context.drawImage(this.image, i, j, width, height, this.x, this.y, dw, dh);
+    }
+
+    periodicFireBall(timeings) {
+        setInterval(this.generateFireBall.bind(this), timeings);
     }
 
 
+
+    generateFireBall() {
+        // console.log("one");
+
+        let projectile = new Projectile(this.x + 20, this.y + 10, this.spriteNo);
+        this.projectile.push(projectile);
+
+    }
+
+    shootFireBall(player) {
+        let collided = false;
+        this.projectile.forEach(element => {
+
+            element.move();
+            let c = element.checkCollision(player);
+
+            if (c) {
+                collided = c;
+            }
+
+
+        });
+        this.projectile = this.projectile.filter(element => {
+            return (!(element.x < 0 || element.y < 0 || element.x > canvas.width || element.y > canvas.height))
+        });
+        collided = this.checkCollision(player);
+        return collided;
+    }
+
+    checkCollision(player) {
+        return this.boundary.intersects(player.boundary);
+    }
 
 }
 
@@ -357,13 +413,43 @@ class Light {
     }
 
 
+
+
+
 }
 
 
 class Projectile {
-    constructor(x, y) {
+    constructor(x, y, direction) {
         this.x = x;
         this.y = y;
         this.boundary = new Boundary(this.x, this.y, 10, 10);
+        this.spriteImage = new Image();
+        this.spriteImage.src = "./images/Fireball2.png";
+        this.speed = 1;
+        this.direction = direction;
+    }
+    drawSprite() {
+        // this.boundary.draw();
+        context.drawImage(this.spriteImage, 0, 0, 16, 16, this.x - 5, this.y - 4, 16, 16);
+
+    }
+    move() {
+        if (this.direction === 2) {
+            this.x -= this.speed;
+        } else if (this.direction === 3) {
+            this.y += this.speed;
+        } else if (this.direction === 4) {
+            this.x += this.speed;
+        } else {
+            this.y -= this.speed;
+        }
+        this.boundary = new Boundary(this.x, this.y, 10, 10);
+        this.drawSprite();
+
+    }
+    checkCollision(player) {
+
+        return this.boundary.intersects(player.boundary);
     }
 }
