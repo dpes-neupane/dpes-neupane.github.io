@@ -55,15 +55,21 @@ class Player {
         this.y = y;
         this.dir = Math.atan(0);
         this.spriteImage = new Image();
-        this.spriteImage.src = "./images/wizard.png";
-        this.width = 20;
-        this.height = 40;
+        this.images = ["./images/mage/walk_left.png", "./images/mage/walk_right.png", "./images/mage/walk_down.png", "./images/mage/walk_up.png"];
+        this.spriteImage.src = this.images[1];
+        this.width = 50;
+        this.height = 50;
         this.boundary = new Boundary(this.x - 10, this.y - 10, this.width, this.height);
         this.speed = 5;
         this.tilePositionX = 1;
         this.tilePositionY = 1;
         this.image = new Image();
         this.image.src = "./images/only-walls-y.png";
+        this.spriteNox = 0;
+        this.spriteNoy = 0;
+        this.spriteW = 64;
+        this.spriteH = 64;
+
 
     }
     createRays() {
@@ -110,12 +116,19 @@ class Player {
 
 
         if (moveLeft) {
+            if (this.x % 2 === 0) {
+                this.spriteNox++;
+                this.spriteNox %= 5;
+            }
+            this.spriteImage.src = this.images[0];
 
             this.x -= this.speed;
             this.dir = 180 * Math.PI / 180;
             if (this.x % 100 === 0) {
                 this.tilePositionX--;
             }
+
+
 
 
         }
@@ -125,6 +138,13 @@ class Player {
             if (this.x % 100 === 0) {
                 this.tilePositionX++;
             }
+            if (this.x % 2 === 0) {
+                this.spriteNox++;
+                this.spriteNox %= 5;
+            }
+            this.spriteImage.src = this.images[1];
+
+
 
 
         }
@@ -134,6 +154,11 @@ class Player {
             if (this.y % 100 === 0) {
                 this.tilePositionY++;
             }
+            if (this.y % 2 === 0) {
+                this.spriteNox++;
+                this.spriteNox %= 4;
+            }
+            this.spriteImage.src = this.images[2];
 
         }
         if (moveUP) {
@@ -143,6 +168,12 @@ class Player {
             if (this.y % 100 === 0) {
                 this.tilePositionY--;
             }
+            if (this.y % 2 === 0) {
+                this.spriteNox++;
+                this.spriteNox %= 4;
+            }
+            this.spriteImage.src = this.images[3];
+
         }
 
 
@@ -216,7 +247,8 @@ class Player {
     }
 
     drawSprite() {
-        context.drawImage(this.spriteImage, 0, 0, 56.25, 96, this.x - 10, this.y - 10, this.width, this.height);
+        context.drawImage(this.spriteImage, this.spriteNox * this.spriteW, this.spriteNoy * this.spriteH, this.spriteW, this.spriteH, this.x - 10, this.y - 10, this.width, this.height);
+
     }
 
     collisionWithWalls(tiles) {
@@ -318,6 +350,7 @@ class Demon {
 
     shootFireBall(player) {
         let collided = false;
+        collided = this.checkCollision(player);
         this.projectile.forEach(element => {
 
             element.move();
@@ -332,7 +365,7 @@ class Demon {
         this.projectile = this.projectile.filter(element => {
             return (!(element.x < 0 || element.y < 0 || element.x > canvas.width || element.y > canvas.height))
         });
-        collided = this.checkCollision(player);
+
         return collided;
     }
 
@@ -462,4 +495,15 @@ class Projectile {
 
         return this.boundary.intersects(player.boundary);
     }
+}
+
+
+class Key {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.w = 10;
+        this.h = 10;
+    }
+
 }
