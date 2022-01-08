@@ -4,8 +4,8 @@ class Ray {
         this.y = y;
         this.xdir = Math.cos(angle * (Math.PI / 180));
         this.ydir = Math.sin(angle * (Math.PI / 180));
-        this.endpointX = this.x + this.xdir * 100;
-        this.endpointY = this.y + this.ydir * 100;
+        this.endpointX = this.x + this.xdir * 200;
+        this.endpointY = this.y + this.ydir * 200;
 
     }
     collides(tiles) {
@@ -34,8 +34,8 @@ class Ray {
     liangBarsky(boundary) {
         let x1 = this.x;
         let y1 = this.y;
-        let x2 = this.x + this.xdir * 100;
-        let y2 = this.y + this.ydir * 100;
+        let x2 = this.endpointX;
+        let y2 = this.endpointY;
         let xwmin = boundary.x;
         let ywmin = boundary.y;
         let xwmax = boundary.x + boundary.w;

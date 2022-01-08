@@ -1,6 +1,6 @@
 canvas = document.querySelector("canvas");
 context = canvas.getContext("2d");
-canvas.height = 670;
+canvas.height = 710;
 canvas.width = 1000;
 let moveUP = 0;
 let moveDown = 0;
@@ -10,7 +10,7 @@ let mousemove = [];
 
 var img = new Image();
 
-img.src = './images/map.png';
+img.src = './images/only-walls.png';
 
 
 
@@ -37,9 +37,10 @@ window.addEventListener("keydown", (e) => {
 
 
 let player = new Player(10, 10);
+let demon = new Demon(350, 200, 50, 50, 2);
 
 let map = new Map(canvas, player);
-// let tiles = map.makeMap();
+
 
 
 function init() {
@@ -66,8 +67,9 @@ function init() {
     }
 
     player.movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles);
-    player.draw(tiles.tiles);
 
+    player.draw(tiles.tiles);
+    demon.drawSprite();
     moveDown = false;
     moveLeft = false;
     moveRight = false;

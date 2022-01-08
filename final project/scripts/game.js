@@ -60,6 +60,8 @@ class Player {
         this.height = 40;
         this.boundary = new Boundary(this.x - 10, this.y - 10, this.width, this.height);
         this.speed = 5;
+        this.tilePositionX = 1;
+        this.tilePositionY = 1;
 
     }
     createRays() {
@@ -109,27 +111,36 @@ class Player {
 
             this.x -= this.speed;
             this.dir = 180 * Math.PI / 180;
+            if (this.x % 100 === 0) {
+                this.tilePositionX--;
+            }
 
 
         }
         if (moveRight) {
             this.x += this.speed;
             this.dir = 0;
-
+            if (this.x % 100 === 0) {
+                this.tilePositionX++;
+            }
 
 
         }
         if (moveDown) {
             this.y += this.speed;
             this.dir = 90 * Math.PI / 180;
-
+            if (this.y % 100 === 0) {
+                this.tilePositionY++;
+            }
 
         }
         if (moveUP) {
             this.y -= this.speed;
             this.dir = 270 * Math.PI / 180;
 
-
+            if (this.y % 100 === 0) {
+                this.tilePositionY--;
+            }
         }
 
 
@@ -162,40 +173,40 @@ class Player {
 
 
     drawRays() {
-        context.beginPath();
+        // context.beginPath();
 
-        context.strokeStyle = "white";
+        // context.strokeStyle = "white";
 
-        context.moveTo(this.x, this.y);
+        // context.moveTo(this.x, this.y);
 
-        context.moveTo(this.x, this.y);
-        context.lineTo(this.rays[0].endpointX, this.rays[0].endpointY);
+        // context.moveTo(this.x, this.y);
+        // context.lineTo(this.rays[0].endpointX, this.rays[0].endpointY);
 
-        context.stroke();
-
-
+        // context.stroke();
 
 
 
 
-        for (let i = 1; i < this.rays.length - 1; i++) {
 
 
-            context.moveTo(this.x, this.y);
-            context.lineTo(this.rays[i].endpointX, this.rays[i].endpointY);
+        // for (let i = 1; i < this.rays.length - 1; i++) {
 
 
-        }
-        context.lineTo(this.rays[this.rays.length - 1].endpointX, this.rays[this.rays.length - 1].endpointY);
-        context.closePath();
-        // context.fill();
-        context.stroke();
+        //     context.moveTo(this.x, this.y);
+        //     context.lineTo(this.rays[i].endpointX, this.rays[i].endpointY);
+
+
+        // }
+        // context.lineTo(this.rays[this.rays.length - 1].endpointX, this.rays[this.rays.length - 1].endpointY);
+        // context.closePath();
+        // // context.fill();
+        // context.stroke();
 
         // for (let i = 1; i < this.rays.length; i++) {
         //     knockoutAndRefill(this.x, this.y, this.rays[i - 1].endpointX, this.rays[i - 1].endpointY, this.rays[i].endpointX, this.rays[i].endpointY);
         // }
         // knockoutAndRefill(this.x, this.y, this.rays[0].endpointX, this.rays[0].endpointY, this.rays[this.rays.length - 3].endpointX, this.rays[this.rays.length - 3].endpointY);
-        // knockoutAndRefill(this.x, this.y, this.rays);
+        knockoutAndRefill(this.x, this.y, this.rays);
 
 
 
@@ -220,4 +231,62 @@ class Player {
     }
 
 
+}
+
+
+
+class Demon {
+    constructor(x, y, w, h, spriteNo) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.boundary = new Boundary(this.x, this.y, this.w, this.h);
+        this.image = new Image();
+        this.image.src = "./images/demon.png";
+        this.spriteNo = spriteNo;
+
+    }
+
+
+
+
+    drawSprite() {
+        let i = 0,
+            j = 10;
+        if (this.spriteNo === 2) {
+            j = 64;
+        } else if (this.spriteNo === 3) {
+            j = 128;
+        } else if (this.spriteNo === 4) {
+            j = 192;
+        }
+        context.drawImage(this.image, i, j, 64, 64, this.x, this.y, this.w, this.h);
+    }
+
+
+
+}
+
+
+
+class Light {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+
+    }
+    shine() {
+
+    }
+    createRays() {
+        this.rays = [];
+        for (let i = 0; i < 360; i += 10) {
+            this.rays.push(new Ray(this.x, this.y, (this.dir * 180 / Math.PI) + i));
+        }
+
+
+
+        return this.rays;
+    }
 }
