@@ -70,9 +70,9 @@ class Player {
         this.spriteImage = new Image();
         this.images = ["./images/mage/walk_left.png", "./images/mage/walk_right.png", "./images/mage/walk_down.png", "./images/mage/walk_up.png"];
         this.spriteImage.src = this.images[1];
-        this.width = 50;
-        this.height = 50;
-        this.boundary = new Boundary(this.x - 10, this.y - 10, this.width, this.height);
+        this.width = 54;
+        this.height = 54;
+        this.boundary = new Boundary(this.x, this.y - 10, this.width - 30, this.height);
         this.speed = 5;
         this.tilePositionX = 1;
         this.tilePositionY = 1;
@@ -112,7 +112,7 @@ class Player {
         context.stroke();
         context.strokeStyle = "black";
         this.createRays();
-        this.boundary.x = this.x - 10;
+        this.boundary.x = this.x + 5;
         this.boundary.y = this.y - 10;
         this.checkCollision(tiles);
 
@@ -519,9 +519,58 @@ class Key {
     drawKey(player) {
         let dist = getDistance(player.x, player.y, this.x, this.y);
         // console.log(dist);
-        if (dist <= 40) {
-            context.drawImage(this.image, 0, 0, this.spriteW, this.spriteH, this.x, this.y, this.w, this.h);
+        // if (dist <= 40) {
+        this.boundary.draw("pink");
+        context.drawImage(this.image, 32, 0, this.spriteW, this.spriteH, this.x, this.y, this.w, this.h);
+        // }
+    }
+    checkCollision(player) {
+        let openDoor = false;
+        if (player.boundary.intersects(this.boundary)) {
+            openDoor = true;
         }
+        return openDoor;
     }
 
+}
+
+
+
+
+class Door {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.w = 40;
+        this.h = 40;
+        this.boundary = new Boundary(this.x, this.y, this.w, this.h);
+        this.image = new Image();
+        this.image.src = "./images/portalRings1.png";
+        this.spriteW = 32;
+        this.spriteH = 32;
+        this.spriteNoX = 0;
+        this.spriteNoY = 0;
+        this.counter = 0;
+        this.light = new Light(this.x + 15, this.y + 15, 10);
+    }
+    drawDoor(keyFound) {
+        if (keyFound) {
+            context.drawImage(this.image, this.spriteNoX * this.spriteW, this.spriteNoX * this.spriteH, this.spriteW, this.spriteH, this.x, this.y, this.w, this.h);
+
+            this.counter++;
+            if (this.counter % 10 == 0) {
+                this.spriteNoX++;
+                if (this.spriteNoX >= 4) {
+                    this.spriteNoY++;
+                    this.spriteNoX = 0;
+                }
+                this.spriteNoY %= 5;
+                if (this.spriteNoY === 0) {
+                    this.counter = 0;
+                }
+            }
+
+
+        }
+    }
 }
