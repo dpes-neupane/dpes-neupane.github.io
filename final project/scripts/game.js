@@ -340,7 +340,8 @@ class Demon {
     }
 
     periodicFireBall(timeings) {
-        setInterval(this.generateFireBall.bind(this), timeings);
+        let id = setInterval(this.generateFireBall.bind(this), timeings);
+        return id;
     }
 
 
@@ -572,5 +573,19 @@ class Door {
 
 
         }
+    }
+
+    checkCollision(player) {
+        return this.boundary.intersects(player.boundary);
+    }
+
+
+
+    startTimer(counter) {
+        context.fillStyle = 'red';
+        context.font = "30px Comic Sans MS";
+        context.fillText("TIME REMAINING: " + counter, 350, 30);
+
+
     }
 }

@@ -1,4 +1,5 @@
 canvas = document.querySelector("canvas");
+container = document.getElementById("container-1");
 context = canvas.getContext("2d");
 canvas.height = 710;
 canvas.width = 1000;
@@ -7,8 +8,46 @@ let moveDown = 0;
 let moveLeft = 0;
 let moveRight = 0;
 let mousemove = [];
+let player = map1.player;
+player = new Player(player[0], player[1]);
+let counter = map1.counter;
+let ids = [];
+let demons = map1.map[0].demons;
+let demonsArr = [];
+let lightsArr = [];
+demons.forEach(element => {
+    let demon = new Demon(element[0], element[1], element[2], element[3], element[4]);
+    demonsArr.push(demon);
+    demon.generateFireBall();
+    let id = demon.periodicFireBall(2500);
+    ids.push(id);
+});
+let lights = map1.map[0].lights;
+lights.forEach(l => {
+    let light = new Light(l[0], l[1], l[2]);
+    lightsArr.push(light);
 
-var img = new Image();
+})
+let map = new Map(canvas, player, map1.map[0]);
+map.getPath();
+
+let key = map.putKeyInMap(demons);
+let door = map.putDoorInMap(demons, key);
+let openDoor = false;
+let startTimer = false;
+let img = new Image();
+let collided = false;
+
+let id = setInterval(() => {
+    if (startTimer) {
+
+        counter--;
+    }
+}, 1000);
+ids.push(id);
+
+
+
 
 img.src = './images/only-walls.png';
 
@@ -36,33 +75,114 @@ window.addEventListener("keydown", (e) => {
 
 
 
-let player = new Player(10, 10);
-
-let map = new Map(canvas, player);
-let demon = new Demon(340, 200, 50, 50, 2);
-let light = new Light(390, 210, 10);
-let demon1 = new Demon(320, 650, 50, 50, 1);
-let light1 = new Light(310, 660, 10);
-let demon2 = new Demon(500, 470, 50, 50, 4);
-let light2 = new Light(510, 520, 10);
-
-let demon3 = new Demon(950, 290, 50, 50, 2);
-let light3 = new Light(985, 290, 10);
-demon.generateFireBall();
-demon.periodicFireBall(2500);
-demon1.generateFireBall();
-demon1.periodicFireBall(1500);
-demon2.generateFireBall();
-demon2.periodicFireBall(2000);
-demon3.generateFireBall();
-demon3.periodicFireBall(2000);
-demons = [demon, demon1, demon2, demon3];
 
 
-map.getPath();
-let key = map.putKeyInMap(demons);
-let door = map.putDoorInMap(demons, key);
-let openDoor = false;
+
+
+
+
+/**
+ * For creating a button for the game restart and start.
+ * 
+ * @param {function} action -an event that needs to happen when the button is clicked.
+ * @param {string} width -width of the button   
+ * @param {string} height -height of the button  
+ * @param {string} top -amount to be displaced from the top 
+ * @param {string} left -amount to be displaced from the left 
+ * @param {boolean} img -true if you want the restart icon 
+ */
+function createButton(action, width, height, top, left, img) {
+    let btn = document.createElement("button");
+    btn.id = container.id + "-btn";
+    if (img) {
+        let btnImg = document.createElement("img");
+        btn.append(btnImg);
+        btnImg.src = "./images/redo-alt-solid.svg";
+    } else {
+        btn.innerText = "Start";
+        btn.style.fontSize = "25px";
+
+    }
+
+    btn.addEventListener("click", action);
+    btn.style.position = "absolute";
+    btn.style.width = width;
+    btn.style.height = height;
+    btn.style.top = top;
+    // btn.style.background = "transparent";
+    btn.style.border = "none";
+    btn.style.left = left;
+    btn.style.cursor = "pointer";
+    container.appendChild(btn);
+
+}
+
+
+
+function gameOver(resetAction) {
+    ids.forEach(id => {
+        console.log(id);
+        clearInterval(id);
+    })
+    moveUP = 0;
+    moveDown = 0;
+    moveLeft = 0;
+    moveRight = 0;
+    mousemove = [];
+    player = map1.player;
+
+    player = new Player(player[0], player[1]);
+    console.log(player);
+    counter = map1.counter;
+    ids = [];
+    demons = map1.map[0].demons;
+    demonsArr = [];
+    lightsArr = [];
+
+    lights = map1.map[0].lights;
+    lights.forEach(l => {
+        let light = new Light(l[0], l[1], l[2]);
+        lightsArr.push(light);
+
+    })
+    map = new Map(canvas, player, map1.map[0]);
+    map.getPath();
+
+    key = map.putKeyInMap(demons);
+    door = map.putDoorInMap(demons, key);
+    openDoor = false;
+    startTimer = false;
+    img = new Image();
+    collided = false;
+    context.fillStyle = "red";
+    context.font = "30px Comic Sans MS";
+    id = setInterval(() => {
+        if (startTimer) {
+
+            counter--;
+        }
+    }, 1000);
+    ids.push(id);
+    context.fillText("Game Over", 440, 350);
+    context.fillText("Play Again??", 440, 390);
+    createButton(resetAction, "50px", "50px", "250px", "670px", true);
+
+}
+
+
+
+function deleteButton() {
+    let btn = document.querySelector("#" + this.container.id + "-btn");
+
+    btn.remove();
+}
+
+
+
+
+
+
+
 
 function init() {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -72,15 +192,15 @@ function init() {
     context.fillRect(0, 0, canvas.width, canvas.height);
     // context.drawImage(img, 0, 0, 500, 400, 0, 0, canvas.width, canvas.height);
     let tiles = map.drawPartOfMap(player);
-    light.shine(tiles.tiles);
-    light1.shine(tiles.tiles);
-    light2.shine(tiles.tiles);
-    light3.shine(tiles.tiles);
+    lightsArr.forEach(element => {
+        element.shine(tiles.tiles);
+    });
     let keyFound = key.checkCollision(player);
     if (keyFound || openDoor) {
         door.light.shine(tiles.tiles);
         door.drawDoor(true);
         openDoor = true;
+        startTimer = true;
     }
 
 
@@ -90,7 +210,6 @@ function init() {
         moveLeft = movement.moveLeft;
         moveRight = movement.moveRight;
         moveUP = movement.moveUP;
-        // console.log(movement.moveDown, movement.moveLeft, movement.moveRight, movement.moveUP)
     }
 
     player.movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles);
@@ -100,25 +219,27 @@ function init() {
     if (keyFound || openDoor) {
 
         door.drawDoor(true);
+        door.startTimer(counter);
+
+
+    }
+    lightsArr.forEach(element => {
+        element.drawSprite();
+    });
+
+
+    for (let i = 0; i < demonsArr.length; i++) {
+        demonsArr[i].drawSprite();
+        collided = demonsArr[i].shootFireBall(player);
+        if (collided) {
+            console.log(collided);
+            gameOver(resetEverything);
+            cancelAnimationFrame(rid);
+
+            return;
+        }
     }
 
-    light.drawSprite();
-    light1.drawSprite();
-    light2.drawSprite();
-    light3.drawSprite();
-    demon.drawSprite();
-
-    demon1.drawSprite();
-    demon2.drawSprite();
-    demon3.drawSprite();
-
-    let collided1 = demon.shootFireBall(player);
-    let collided2 = demon1.shootFireBall(player);
-    let collided3 = demon2.shootFireBall(player);
-    let collided4 = demon3.shootFireBall(player);
-    if (collided1 || collided2 || collided3 || collided4) {
-        return;
-    }
     moveDown = false;
     moveLeft = false;
     moveRight = false;
@@ -130,9 +251,28 @@ function init() {
         key.drawKey(player);
 
     }
+    if (counter === 0) {
+        gameOver(resetEverything);
+        cancelAnimationFrame(rid);
+        return;
+    }
 
 
-    requestAnimationFrame(init);
+
+    rid = requestAnimationFrame(init);
 }
 
+function resetEverything() {
+    demons.forEach(element => {
+        let demon = new Demon(element[0], element[1], element[2], element[3], element[4]);
+        demonsArr.push(demon);
+        demon.generateFireBall();
+        let id = demon.periodicFireBall(2500);
+        ids.push(id);
+    });
+    init();
+    deleteButton();
+    // console.log("reset");
+
+}
 init();

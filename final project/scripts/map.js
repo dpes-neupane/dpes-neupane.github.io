@@ -1,47 +1,18 @@
 class Map {
-    constructor(canvas) {
+    constructor(canvas, container, map) {
         this.x = -100;
         this.y = -100;
+        this.container = document.getElementById(container);
         this.width = canvas.width;
         this.height = canvas.height;
         this.tiles = [];
         this.path = [];
-        this.map1 = {
-            cols: 20,
-            rows: 20,
-            tsize: 100,
-            tiles: [
-                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-                2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1, 0, 0, 1, 0, 1, 2,
-                2, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 2, 0, 1, 0, 0, 1, 0, 1, 2,
-                2, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-                2, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 2, 1, 0, 0, 1, 0, 1, 1, 2,
-                2, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 2, 1, 1, 0, 1, 1, 1, 1, 2,
-                2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 2, 0, 1, 1, 1, 0, 0, 1, 2,
-                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 0, 0, 0, 1, 2,
-                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+        // this.map1 = map1.map[0];
+        this.map1 = map;
 
-                2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 2, 2, 0, 0, 0, 1, 1, 0, 1, 2,
-                2, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 2,
-                2, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 2,
-                2, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 2,
-                2, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 2,
-                2, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 2,
-                2, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 2,
-                2, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 2,
-                2, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 2,
-                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
-                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-
-            ],
-            getElement: function(col, row, map) {
-                return this.tiles[row * map.cols + col];
-            }
-
-        };
         this.noTileInWindowX = this.width / this.map1.tsize;
         this.noTileInWindowY = this.width / this.map1.tsize;
+
 
     }
 
@@ -262,6 +233,56 @@ class Map {
         }
 
         return collides;
+    }
+
+
+
+    gameOver(init) {
+        context.fillStyle = "red";
+        context.font = "30px Comic Sans MS";
+
+        context.fillText("Game Over", 450, 350);
+        context.fillText("Play Again??", 450, 390);
+        this.createButton(init, )
+
+    }
+
+
+
+    /**
+     * For creating a button for the game restart and start.
+     * 
+     * @param {function} action -an event that needs to happen when the button is clicked.
+     * @param {string} width -width of the button   
+     * @param {string} height -height of the button  
+     * @param {string} top -amount to be displaced from the top 
+     * @param {string} left -amount to be displaced from the left 
+     * @param {boolean} img -true if you want the restart icon 
+     */
+    createButton(action, width, height, top, left, img) {
+        let btn = document.createElement("button");
+        btn.id = this.container.id + "-btn";
+        if (img) {
+            let btnImg = document.createElement("img");
+            btn.append(btnImg);
+            btnImg.src = "./images/redo-alt-solid.svg";
+        } else {
+            btn.innerText = "Start";
+            btn.style.fontSize = "25px";
+
+        }
+
+        btn.addEventListener("click", action);
+        btn.style.position = "absolute";
+        btn.style.width = width;
+        btn.style.height = height;
+        btn.style.top = top;
+        btn.style.background = "transparent";
+        btn.style.border = "none";
+        btn.style.left = left;
+        btn.style.cursor = "pointer";
+        this.container.appendChild(btn);
+
     }
 
 
