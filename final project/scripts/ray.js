@@ -1,11 +1,12 @@
 class Ray {
-    constructor(x, y, angle) {
+    constructor(x, y, angle, raysize) {
         this.x = x;
         this.y = y;
+
         this.xdir = Math.cos(angle * (Math.PI / 180));
         this.ydir = Math.sin(angle * (Math.PI / 180));
-        this.endpointX = this.x + this.xdir * 100;
-        this.endpointY = this.y + this.ydir * 100;
+        this.endpointX = this.x + this.xdir * raysize;
+        this.endpointY = this.y + this.ydir * raysize;
 
     }
     collides(tiles) {
@@ -34,8 +35,8 @@ class Ray {
     liangBarsky(boundary) {
         let x1 = this.x;
         let y1 = this.y;
-        let x2 = this.x + this.xdir * 100;
-        let y2 = this.y + this.ydir * 100;
+        let x2 = this.endpointX;
+        let y2 = this.endpointY;
         let xwmin = boundary.x;
         let ywmin = boundary.y;
         let xwmax = boundary.x + boundary.w;
@@ -77,7 +78,9 @@ class Ray {
         if (t1 < t2) {
             return {
                 x: x1 + t1 * delX,
-                y: y1 + t1 * delY
+                y: y1 + t1 * delY,
+                x2: x1 + t2 * delX,
+                y2: y1 + t2 * delY
             }
 
         }
