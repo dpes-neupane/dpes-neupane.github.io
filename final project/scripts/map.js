@@ -170,6 +170,7 @@ class Map {
             if (!this.checkdist(demons, key)) {
                 placed = true;
             }
+
             maxCount--;
 
 
