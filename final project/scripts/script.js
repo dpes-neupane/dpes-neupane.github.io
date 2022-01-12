@@ -111,7 +111,6 @@ function createButton(action, width, height, top, left, img) {
     btn.style.width = width;
     btn.style.height = height;
     btn.style.top = top;
-    // btn.style.background = "transparent";
     btn.style.border = "none";
     btn.style.left = left;
     btn.style.cursor = "pointer";
@@ -259,7 +258,6 @@ function init() {
 
     context.fillStyle = "black";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    // context.drawImage(img, 0, 0, 500, 400, 0, 0, canvas.width, canvas.height);
     let tiles = map.drawPartOfMap(player);
     lightsArr.forEach(element => {
         element.shine(tiles.tiles);
@@ -280,7 +278,6 @@ function init() {
         moveRight = movement.moveRight;
         moveUP = movement.moveUP;
     }
-    // console.log(player);
 
     player.movePlayer(moveLeft, moveRight, moveDown, moveUP, tiles);
 
@@ -354,8 +351,7 @@ function resetEverything() {
     });
     init();
     deleteButton();
-    // console.log("reset");
+
 
 }
-// init();
-nextMap();
+init();

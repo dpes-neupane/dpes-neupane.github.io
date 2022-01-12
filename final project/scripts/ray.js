@@ -16,7 +16,6 @@ class Ray {
 
             let point = this.liangBarsky(element.boundary);
             if (point !== null && point != undefined) {
-                // element.draw("red");
                 if (intersects === undefined)
                     intersects = point;
                 else {
@@ -66,9 +65,7 @@ class Ray {
             if (p[i] > 0) {
                 t2 = Math.min(1, q[i] / p[i], t2);
             }
-            // console.log(p[i], q[i]);
-            // // console.log(x1, y1, x2, y2, xwmin, ywmin, xwmax, ywmax);
-            // console.log(t1, t2, q[i] / p[i]);
+
 
         }
         if (t1 > t2) {

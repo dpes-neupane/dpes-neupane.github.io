@@ -28,19 +28,7 @@ function getRandomInt(min, max) {
 }
 
 
-// function knockoutAndRefill(x0, y0, x1, y1, x2, y2) {
-//     context.save();
-//     context.fillStyle = 'black';
-//     context.fillRect(0, 0, canvas.width, canvas.height);
-//     context.beginPath();
-//     context.moveTo(x0, y0);
-//     context.lineTo(x1, y1);
-//     context.lineTo(x2, y2);
-//     context.closePath();
-//     context.clip();
-//     context.drawImage(img, 0, 0);
-//     context.restore();
-// }
+
 
 function knockoutAndRefill(x0, y0, rays) {
     context.save();
@@ -98,18 +86,11 @@ class Player {
         return this.rays;
     }
     draw(tiles) {
-        // context.beginPath();
-        // context.arc(this.x, this.y, 5, 0, 2 * Math.PI, false);
+
         context.fillStyle = "white";
-        // context.fill();
 
-        context.beginPath();
-        context.moveTo(this.x, this.y);
 
-        context.lineTo(this.x + Math.cos(this.dir) * 40, this.y + Math.sin(this.dir) * 40);
-        context.closePath();
-        context.strokeStyle = "red";
-        context.stroke();
+
         context.strokeStyle = "black";
         this.createRays();
         this.boundary.x = this.x + 5;
@@ -117,7 +98,7 @@ class Player {
         this.checkCollision(tiles);
 
         this.drawRays();
-        // this.boundary.draw();
+
 
         this.drawSprite();
         context.fillStyle = "black";
@@ -222,42 +203,8 @@ class Player {
 
 
     drawRays() {
-        // context.beginPath();
 
-        // context.strokeStyle = "white";
-
-        // context.moveTo(this.x, this.y);
-
-
-        // context.lineTo(this.rays[0].endpointX, this.rays[0].endpointY);
-
-        // context.stroke();
-
-
-
-
-
-
-        // for (let i = 1; i < this.rays.length - 1; i++) {
-
-
-        //     context.moveTo(this.x, this.y);
-        //     context.lineTo(this.rays[i].endpointX, this.rays[i].endpointY);
-
-
-        // }
-        // context.lineTo(this.rays[this.rays.length - 1].endpointX, this.rays[this.rays.length - 1].endpointY);
-        // context.closePath();
-        // // context.fill();
-        // context.stroke();
-
-        // for (let i = 1; i < this.rays.length; i++) {
-        //     knockoutAndRefill(this.x, this.y, this.rays[i - 1].endpointX, this.rays[i - 1].endpointY, this.rays[i].endpointX, this.rays[i].endpointY);
-        // }
-        // knockoutAndRefill(this.x, this.y, this.rays[0].endpointX, this.rays[0].endpointY, this.rays[this.rays.length - 3].endpointX, this.rays[this.rays.length - 3].endpointY);
         this.knockoutAndRefill(this.x, this.y, this.rays);
-
-
 
 
     }
@@ -335,7 +282,6 @@ class Demon {
             dw = 32;
 
         }
-        // this.boundary.draw();
         context.drawImage(this.image, i, j, width, height, this.x, this.y, dw, dh);
     }
 
@@ -347,7 +293,6 @@ class Demon {
 
 
     generateFireBall() {
-        // console.log("one");
 
         let projectile = new Projectile(this.x + 20, this.y + 10, this.spriteNo);
         this.projectile.push(projectile);
@@ -478,7 +423,7 @@ class Projectile {
         this.direction = direction;
     }
     drawSprite() {
-        // this.boundary.draw();
+
 
         context.drawImage(this.spriteImage, 0, 0, 16, 16, this.x - 5, this.y - 4, 16, 16);
 
@@ -519,11 +464,11 @@ class Key {
 
     drawKey(player) {
         let dist = getDistance(player.x, player.y, this.x, this.y);
-        // console.log(dist);
-        // if (dist <= 40) {
-        this.boundary.draw("pink");
-        context.drawImage(this.image, 32, 0, this.spriteW, this.spriteH, this.x, this.y, this.w, this.h);
-        // }
+
+        if (dist <= 40) {
+            this.boundary.draw("pink");
+            context.drawImage(this.image, 32, 0, this.spriteW, this.spriteH, this.x, this.y, this.w, this.h);
+        }
     }
     checkCollision(player) {
         let openDoor = false;
