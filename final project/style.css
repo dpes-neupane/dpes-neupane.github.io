@@ -1,6 +1,15 @@
+#wrapper {
+    margin: 0 auto;
+}
+
 canvas {
     display: block;
-    margin: 0 auto;
     border: 2px solid black;
     box-sizing: border-box;
+}
+
+#info {
+    float: left;
+    width: 130px;
+    margin-left: 10px;
 }

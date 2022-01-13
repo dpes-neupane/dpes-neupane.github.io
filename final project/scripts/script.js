@@ -15,6 +15,8 @@ let ids = [];
 let demons = map1.map[0].demons;
 let demonsArr = [];
 let lightsArr = [];
+let mapNo = 0; //the map is in an array 
+let keyFound = false;
 demons.forEach(element => {
     let demon = new Demon(element[0], element[1], element[2], element[3], element[4]);
     demonsArr.push(demon);
@@ -30,9 +32,9 @@ lights.forEach(l => {
 })
 let map = new Map(canvas, player, map1.map[0]);
 map.getPath();
-
-let key = map.putKeyInMap(demons);
-let door = map.putDoorInMap(demons, key);
+let doorCollision = false;
+let key = map.putKeyInMap(demonsArr);
+let door = map.putDoorInMap(demonsArr, key);
 let openDoor = false;
 let startTimer = false;
 let img = new Image();
@@ -109,7 +111,6 @@ function createButton(action, width, height, top, left, img) {
     btn.style.width = width;
     btn.style.height = height;
     btn.style.top = top;
-    // btn.style.background = "transparent";
     btn.style.border = "none";
     btn.style.left = left;
     btn.style.cursor = "pointer";
@@ -119,9 +120,10 @@ function createButton(action, width, height, top, left, img) {
 
 
 
-function gameOver(resetAction) {
+
+function nextMap() {
     ids.forEach(id => {
-        console.log(id);
+
         clearInterval(id);
     })
     moveUP = 0;
@@ -130,22 +132,23 @@ function gameOver(resetAction) {
     moveRight = 0;
     mousemove = [];
     player = map1.player;
-
+    keyFound = false;
     player = new Player(player[0], player[1]);
     console.log(player);
+    doorCollision = false;
     counter = map1.counter;
     ids = [];
-    demons = map1.map[0].demons;
+    demons = map1.map[1].demons;
     demonsArr = [];
     lightsArr = [];
-
-    lights = map1.map[0].lights;
+    mapNo = 1;
+    lights = map1.map[1].lights;
     lights.forEach(l => {
         let light = new Light(l[0], l[1], l[2]);
         lightsArr.push(light);
 
     })
-    map = new Map(canvas, player, map1.map[0]);
+    map = new Map(canvas, player, map1.map[1]);
     map.getPath();
 
     key = map.putKeyInMap(demons);
@@ -158,13 +161,78 @@ function gameOver(resetAction) {
     context.font = "30px Comic Sans MS";
     id = setInterval(() => {
         if (startTimer) {
+            console.log(counter, mapNo);
+            counter--;
+        }
+    }, 1000);
+    ids.push(id);
+
+    demons.forEach(element => {
+        let demon = new Demon(element[0], element[1], element[2], element[3], element[4]);
+        demonsArr.push(demon);
+        demon.generateFireBall();
+        let id = demon.periodicFireBall(2500);
+        ids.push(id);
+    });
+    init();
+
+}
+
+
+function gameOver(resetAction, playedAll) {
+    context.font = "30px Comic Sans MS";
+    context.fillStyle = "red";
+    context.fillText("Play Again??", 440, 390);
+    console.log(playedAll)
+    if (playedAll) {
+        mapNo = 0;
+        context.fillText("You Won", 440, 350);
+
+    } else {
+        context.fillText("Game Over", 440, 350);
+
+    }
+    ids.forEach(id => {
+        clearInterval(id);
+    })
+    moveUP = 0;
+    moveDown = 0;
+    moveLeft = 0;
+    moveRight = 0;
+    mousemove = [];
+    player = map1.player;
+    keyFound = false;
+    player = new Player(player[0], player[1]);
+    counter = map1.counter;
+    ids = [];
+    demons = map1.map[0].demons;
+    demonsArr = [];
+    lightsArr = [];
+    doorCollision = false;
+    lights = map1.map[0].lights;
+    lights.forEach(l => {
+        let light = new Light(l[0], l[1], l[2]);
+        lightsArr.push(light);
+
+    })
+    map = new Map(canvas, player, map1.map[0]);
+    map.getPath();
+
+    key = map.putKeyInMap(demonsArr);
+    door = map.putDoorInMap(demonsArr, key);
+    openDoor = false;
+    startTimer = false;
+    img = new Image();
+    collided = false;
+
+    id = setInterval(() => {
+        if (startTimer) {
 
             counter--;
         }
     }, 1000);
     ids.push(id);
-    context.fillText("Game Over", 440, 350);
-    context.fillText("Play Again??", 440, 390);
+
     createButton(resetAction, "50px", "50px", "250px", "670px", true);
 
 }
@@ -190,12 +258,11 @@ function init() {
 
     context.fillStyle = "black";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    // context.drawImage(img, 0, 0, 500, 400, 0, 0, canvas.width, canvas.height);
     let tiles = map.drawPartOfMap(player);
     lightsArr.forEach(element => {
         element.shine(tiles.tiles);
     });
-    let keyFound = key.checkCollision(player);
+    keyFound = key.checkCollision(player);
     if (keyFound || openDoor) {
         door.light.shine(tiles.tiles);
         door.drawDoor(true);
@@ -233,7 +300,7 @@ function init() {
         collided = demonsArr[i].shootFireBall(player);
         if (collided) {
             console.log(collided);
-            gameOver(resetEverything);
+            gameOver(resetEverything, false);
             cancelAnimationFrame(rid);
 
             return;
@@ -252,10 +319,22 @@ function init() {
 
     }
     if (counter === 0) {
-        gameOver(resetEverything);
+        gameOver(resetEverything, false);
         cancelAnimationFrame(rid);
         return;
     }
+    doorCollision = door.checkCollision(player);
+    if (doorCollision && mapNo === 1) {
+        gameOver(resetEverything, true);
+        cancelAnimationFrame(rid);
+        return;
+    }
+    if (doorCollision && openDoor) {
+        nextMap();
+        cancelAnimationFrame(rid);
+
+    }
+
 
 
 
@@ -272,7 +351,7 @@ function resetEverything() {
     });
     init();
     deleteButton();
-    // console.log("reset");
+
 
 }
 init();

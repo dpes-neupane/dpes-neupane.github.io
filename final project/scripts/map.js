@@ -7,7 +7,6 @@ class Map {
         this.height = canvas.height;
         this.tiles = [];
         this.path = [];
-        // this.map1 = map1.map[0];
         this.map1 = map;
 
         this.noTileInWindowX = this.width / this.map1.tsize;
@@ -113,7 +112,7 @@ class Map {
                     this.tiles.push(boundary);
                 } else {
                     let tile = new Tile(i * this.map1.tsize + this.x, j * this.map1.tsize + this.y);
-                    // tile.drawTile();
+
                 }
 
 
@@ -170,6 +169,7 @@ class Map {
             if (!this.checkdist(demons, key)) {
                 placed = true;
             }
+
             maxCount--;
 
 
