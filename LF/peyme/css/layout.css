@@ -1,0 +1,28 @@
+.centering_container {
+    max-width: 1226px;
+    margin: 0 auto;
+}
+
+.footer-wrapper {
+    max-width: 1226px;
+    margin: 0 auto;
+}
+
+.one-section {
+    border-bottom: 2px solid #e6f9d3;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    background-image: url(../images/Point-line\ triangle\ cube.svg), url(../images/Point-line\ triangle\ cube\ smaller.svg), url(../images/Point-line\ triangle\ cube\ smaller.svg), url(../images/Point-line\ triangle\ cube\ smaller.svg);
+    background-repeat: no-repeat;
+    background-position: center, top center, left center, right bottom;
+}
+
+.center {
+    width: auto;
+    text-align: center;
+}
+
+.centering {
+    width: fit-content;
+    margin: 0 auto;
+}
