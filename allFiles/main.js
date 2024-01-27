@@ -1,5 +1,5 @@
 import * as THREE from '../node_modules/three';
-
+import * as BufferGeometryUtils from '../node_modules/three/examples/jsm/utils/BufferGeometryUtils.js';
 const MAXSPEED = .091;
 const MINSPEED = .0091;
 const AVOID_FACTOR = 0.0095;
@@ -34,7 +34,37 @@ var Bird = function () {
   
 };
 
+//cloud shader
 
+const cloudShader = {
+        vertexShader:
+       `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+  `,
+  fragmentShader:
+  `
+    uniform sampler2D map;
+    uniform vec3 fogColor;
+    uniform float fogNear;
+    uniform float fogFar;
+    varying vec2 vUv;
+
+    void main() {
+
+      float depth = gl_FragCoord.z / gl_FragCoord.w;
+      float fogFactor = smoothstep( fogNear, fogFar, depth );
+
+      gl_FragColor = texture2D( map, vUv );
+      gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+      gl_FragColor = mix( gl_FragColor, vec4( fogColor , gl_FragColor.w ), fogFactor );
+
+    }
+  `
+}
 
 var sizes = {
         width: window.innerWidth,
@@ -56,7 +86,7 @@ window.addEventListener('resize', () => {
 })
 
 
-
+//scene init
 const aspect = window.innerWidth / window.innerHeight;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000);
@@ -65,27 +95,34 @@ const renderer = new THREE.WebGLRenderer({antialias: true} );
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 // const material = new THREE.MeshStandardMaterial( { color: THREE.MathUtils.randInt(4, 0xffffff), roughness:0.0, side:THREE.DoubleSide} );
-const material = new THREE.MeshStandardMaterial( { color: 0xffffff , roughness:0.0, side:THREE.DoubleSide} );
+
+
+// moon Material
+const material = new THREE.MeshStandardMaterial( { color: 0xffffff , roughness:0.0, side:THREE.DoubleSide, metalness:0.46} );
+
 const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
 directionalLight.position.set(-100, 0, 14);
 scene.add(directionalLight);
+
 const light = new THREE.AmbientLight(0x404040, 10);
 scene.add(light);
+
 const spotlight = new THREE.SpotLight(0xffffff);
 spotlight.position.set(0, 0, 100);
 spotlight.castShadow = true;
 spotlight.angle = 20 * Math.PI / 180;
 spotlight.exponent = 1;
 spotlight.target.position.set(0.5, 0.5, 10);
+scene.add(spotlight);
+
 const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
 hemiLight.color.setHSL( 0.6, 1, 0.6 );
 hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
 hemiLight.position.set( 0, 0, 0 );
 scene.add( hemiLight );
 
-scene.add(spotlight);
-const moonGeo = new THREE.SphereGeometry(.35, 32, 164 );
-const textureloader = new THREE.TextureLoader();
+const moonGeo = new THREE.SphereGeometry(1.35, 32, 164 );
+var textureloader = new THREE.TextureLoader();
 const texture = textureloader.load('./assets/moon.png');
 const displacementMap = textureloader.load('./assets/bumps.jpg');
 const worldTexture = textureloader.load('./assets/star2.jpg');
@@ -131,7 +168,7 @@ const haloFragmentShader = /*glsl*/`
 varying vec3 vertexNormal;
 void main() {
 float intensity = pow(0.7 - dot(vertexNormal, vec3(0, 0, 1.0)), 2.0);
-gl_FragColor = vec4(.7, .9, .65, 0.059) * intensity;
+gl_FragColor = vec4(.7, .79, .6, 0.024) * intensity;
 }
 `;
 const halo = new THREE.Mesh(
@@ -145,21 +182,163 @@ const halo = new THREE.Mesh(
 )
 
 // scene.add(sphere);
-halo.scale.set(0.051, 0.051, 0.051);
-halo.position.x = moon.position.x =3.9;
-halo.position.y = moon.position.y = 1.;
-halo.position.z = moon.position.z = -2.9;
+halo.scale.set(0.2, 0.2, 0.2);
+halo.position.x = moon.position.x =5.;
+halo.position.y = moon.position.y = 3.;
+halo.position.z = moon.position.z = -5.9;
 // moon
 moon.rotation.x = Math.PI *0.02;
 moon.rotation.y = Math.PI * 1.54;
 scene.add(moon);
 scene.add(halo);
+const fog =  new THREE.FogExp2(0xcccccc, 0.04);
+scene.fog = fog ;
 camera.position.z = 4;
 // camera.position.y = 2;
 // camera.lookAt(moon.position);
 // camera.position.x = 1;
 // camera.position.y = -4;
 // camera.position.z = -4;
+// adding clouds in the scene
+
+
+
+
+const cloudTexture = textureloader.load('./assets/cloud10.png');
+
+var cloudMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+                "map": { type: "t", value: cloudTexture },
+                "fogColor" : { type: "c", value: fog.color },
+                "fogNear" : { type: "f", value: fog.near },
+                "fogFar" : { type: "f", value: fog.far },
+        },
+        vertexShader: cloudShader.vertexShader,
+        fragmentShader: cloudShader.fragmentShader,
+        depthWrite: false,
+        depthTest: false,
+        transparent: true,
+}); 
+function addClouds(){
+
+        var planeGeo = new THREE.PlaneGeometry(64, 64);
+        var planeObj = new THREE.Object3D();
+        const geometries = [];
+
+        const planeObjs = [];
+        for ( var i = 0; i < 2; i++ ) {
+
+                planeObj.position.x = -6-Math.random() * 5 ;
+                // planeObj.position.x = 4.744833741001892;
+                // planeObj.position.y = -0.93;
+                planeObj.position.y = - Math.random() * Math.random() * 5 ;
+                // planeObj.position.z = Math.random() * 0.00005 ;
+                planeObj.rotation.z = Math.random() * Math.PI;
+                planeObj.scale.x = .089;
+                planeObj.scale.y =   .08 ;
+                planeObj.updateMatrix()
+
+                const clonedPlaneGeo = planeGeo.clone();
+                clonedPlaneGeo.applyMatrix4(planeObj.matrix);
+                const clonedPlaneObj = planeObj.clone();
+                planeObjs.push(clonedPlaneObj);
+                geometries.push(clonedPlaneGeo)
+
+        }
+
+        var planeGeos = BufferGeometryUtils.mergeGeometries(geometries);
+        const planesMesh = new THREE.Mesh(planeGeos, cloudMaterial);
+        // planesMesh.renderOrder = 2;
+        for ( var i = 0; i < 2; i++ ) {
+
+                planeObj.position.x = 15-Math.random() * 10 ;
+                // planeObj.position.x = 4.744833741001892;
+                // planeObj.position.y = -0.93;
+                planeObj.position.y =  Math.random() * Math.random() * 5;
+                // planeObj.position.z = Math.random() * 0.00005 ;
+                planeObj.rotation.z = Math.random() * Math.PI;
+                planeObj.scale.x = .065;
+                planeObj.scale.y =   .064 ;
+                planeObj.updateMatrix()
+
+                const clonedPlaneGeo = planeGeo.clone();
+                clonedPlaneGeo.applyMatrix4(planeObj.matrix);
+                const clonedPlaneObj = planeObj.clone();
+                planeObjs.push(clonedPlaneObj);
+                geometries.push(clonedPlaneGeo)
+
+        }
+
+        planeGeos = BufferGeometryUtils.mergeGeometries(geometries);
+        const planesMeshA = new THREE.Mesh(planeGeos, cloudMaterial);
+        // planesMeshA.position.z = -1;
+        // planesMeshA.renderOrder = 1;
+
+        scene.add( planesMesh );
+        scene.add(planesMeshA);
+        return {pM: planesMesh, pM2: planesMeshA};
+}
+
+
+function moveClouds(pMesh, pM2 ){
+       // pMesh.position.x = Math.max(0, Math.sin(Math.random() + 2000)) % 63;
+        var vel =  Math.sin( 0.0065);
+        pMesh.position.x = (pMesh.position.x +  Math.max(0,vel)) % 50;  
+        pM2.position.x = (pM2.position.x -  Math.max(0, vel)) % 50;  
+        var val1 = Math.sin( 0.0005);
+        var val2 = Math.sin(0.0005);
+        // if((pMesh.scale.x+val1) > 1.5 ){
+        //         val1 = -Math.sin(0.0005);
+        //         console.log("before val1", val1);
+        // } 
+        // if(pMesh.scale.x == 0){
+        //         val1 = -val1;
+        // }
+        console.log("before", pMesh.scale.x);
+        // pMesh.scale.x = (pMesh.scale.x + val1)%1.6 ;
+        // pMesh.scale.y = (pMesh.scale.y + val1)%1.6 ;
+        // if((pM2.scale.x+val2) > 1.5 ){
+        //         val2 = -val2;
+        // } 
+        // if(pM2.scale.x == 0){
+        //         val2 = -val2;
+        // }
+        // pM2.scale.x = (pM2.scale.x + val2)%1.6  ;
+        // pM2.scale.y = (pM2.scale.y + val2)%1.6  ;
+        // console.log(pM2.scale.x);
+        console.log("after", pMesh.scale.x);
+        console.log("val1", val1);
+        // console.log(pMesh)
+        // var planeObj = new THREE.Object3D();
+        // for(var i=0; i<pMesh.length; i++ ){
+        //         pObj[i].position.x = (pObj[i].position.x + Math.max(0, Math.sin(Math.random() * 0.05))) % 10;
+        //         // pObj[i].updateMatrix();
+        //
+        //         pMesh[i].applyMatrix4(pObj[i].matrix);
+        //
+        // }
+        //
+        //
+        //         const planeGeos = BufferGeometryUtils.mergeGeometries(pMesh);
+        //         const planesMesh = new THREE.Mesh(planeGeos, cloudMaterial);
+        //
+        // scene.add(planesMesh);
+        // return {pM: planesMesh, geos: pMesh, pObj: pObj};
+}
+
+
+
+
+
+var clouds = addClouds();
+console.log(clouds.pM);
+
+
+
+
+
+
+
 var birds = [];
 function createBirds(no){
         for (var i=0; i<no; i++){
@@ -194,7 +373,7 @@ function createBirds(no){
                 bd.speed.x = Math.abs(Math.random() - 0.5) / 100;
                 bd.speed.y = Math.abs(Math.random() - 0.5) / 100;
                 bd.speed.z = (Math.random() - 0.5) / 100;
-                bd.mesh.scale.set(0.0051, 0.0051, 0.0051);
+                bd.mesh.scale.set(0.00521, 0.00521, 0.00521);
                 scene.add(bd.mesh);
                 // console.log(bd.speed);
                 birds.push(bd);
@@ -375,6 +554,8 @@ function animate() {
         world.rotation.y += 0.00001;
         calcFlocking(noBirds);
         moveBirds(noBirds);
+        // scene.remove(clouds.pM);
+        moveClouds(clouds.pM, clouds.pM2);
         renderer.render( scene, camera );
 }
 

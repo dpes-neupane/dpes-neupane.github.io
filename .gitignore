@@ -1,2 +1,7 @@
 node_modules/
 Boids/
+allFiles/
+package.json
+webpack.config.json
+package-lock.json
+
