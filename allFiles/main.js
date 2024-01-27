@@ -1,3 +1,8 @@
+import "./style.css"
+import cdTexture from "./assets/cloud10.png";
+import dMap from "./assets/bumps.jpg";
+import txt from "./assets/moon.png";
+import wrldTxture from "./assets/star2.jpg";
 import * as THREE from '../node_modules/three';
 import * as BufferGeometryUtils from '../node_modules/three/examples/jsm/utils/BufferGeometryUtils.js';
 const MAXSPEED = .091;
@@ -123,9 +128,9 @@ scene.add( hemiLight );
 
 const moonGeo = new THREE.SphereGeometry(1.35, 32, 164 );
 var textureloader = new THREE.TextureLoader();
-const texture = textureloader.load('./assets/moon.png');
-const displacementMap = textureloader.load('./assets/bumps.jpg');
-const worldTexture = textureloader.load('./assets/star2.jpg');
+const texture = textureloader.load(txt);
+const displacementMap = textureloader.load(dMap);
+const worldTexture = textureloader.load(wrldTxture);
 // worldTexture.offset.set(.000001, 0.0000001);
 // worldTexture.wrapS = THREE.RepeatWrapping;
 // worldTexture.wrapT = THREE.RepeatWrapping;
@@ -204,7 +209,7 @@ camera.position.z = 4;
 
 
 
-const cloudTexture = textureloader.load('./assets/cloud10.png');
+const cloudTexture = textureloader.load(cdTexture);
 
 var cloudMaterial = new THREE.ShaderMaterial({
         uniforms: {
@@ -285,8 +290,7 @@ function moveClouds(pMesh, pM2 ){
         var vel =  Math.sin( 0.0065);
         pMesh.position.x = (pMesh.position.x +  Math.max(0,vel)) % 50;  
         pM2.position.x = (pM2.position.x -  Math.max(0, vel)) % 50;  
-        var val1 = Math.sin( 0.0005);
-        var val2 = Math.sin(0.0005);
+        // var val1 = Math.sin( 0.0005)= Math.sin(0.0005);
         // if((pMesh.scale.x+val1) > 1.5 ){
         //         val1 = -Math.sin(0.0005);
         //         console.log("before val1", val1);
@@ -294,7 +298,7 @@ function moveClouds(pMesh, pM2 ){
         // if(pMesh.scale.x == 0){
         //         val1 = -val1;
         // }
-        console.log("before", pMesh.scale.x);
+        // console.log("before", pMesh.scale.x);
         // pMesh.scale.x = (pMesh.scale.x + val1)%1.6 ;
         // pMesh.scale.y = (pMesh.scale.y + val1)%1.6 ;
         // if((pM2.scale.x+val2) > 1.5 ){
@@ -306,8 +310,8 @@ function moveClouds(pMesh, pM2 ){
         // pM2.scale.x = (pM2.scale.x + val2)%1.6  ;
         // pM2.scale.y = (pM2.scale.y + val2)%1.6  ;
         // console.log(pM2.scale.x);
-        console.log("after", pMesh.scale.x);
-        console.log("val1", val1);
+        // console.log("after", pMesh.scale.x);
+        // console.log("val1", val1);
         // console.log(pMesh)
         // var planeObj = new THREE.Object3D();
         // for(var i=0; i<pMesh.length; i++ ){
@@ -331,7 +335,7 @@ function moveClouds(pMesh, pM2 ){
 
 
 var clouds = addClouds();
-console.log(clouds.pM);
+// console.log(clouds.pM);
 
 
 
